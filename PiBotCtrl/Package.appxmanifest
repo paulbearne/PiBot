@@ -34,9 +34,14 @@
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
+    <Capability Name="internetClientServer" />
+    <Capability Name="privateNetworkClientServer" />
     <uap:Capability Name="musicLibrary" />
     <uap:Capability Name="picturesLibrary" />
     <uap:Capability Name="videosLibrary" />
+    <uap:Capability Name="chat" />
+    <uap:Capability Name="voipCall" />
+    <uap:Capability Name="removableStorage" />
     <DeviceCapability Name="bluetooth" />
     <DeviceCapability Name="microphone" />
   </Capabilities>

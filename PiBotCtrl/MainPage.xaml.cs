@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerSocket;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,6 +33,8 @@ namespace PiBotCtrl
         private Tsc2046 tsc2046;
         private TouchPanels.TouchProcessor processor;
         private Point lastPosition = new Point(double.NaN, double.NaN);
+        private SocketServer tcpServer; // tcp server
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -40,8 +43,9 @@ namespace PiBotCtrl
     
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Init();
-            Status.Text = "Init Success";
+            initTouch();
+            startServer();
+            Status.Text = "Controller Initialised waiting for connection";
             base.OnNavigatedTo(e);
         }
 
@@ -60,7 +64,7 @@ namespace PiBotCtrl
             base.OnNavigatingFrom(e);
         }
 
-        private async void Init()
+        private async void initTouch()
         {
             tsc2046 = await TouchPanels.Devices.Tsc2046.GetDefaultAsync();
             try
@@ -220,6 +224,44 @@ namespace PiBotCtrl
                 }
             }
             return null;
+        }
+
+        
+
+        private void startServer()
+        {
+            tcpServer = new SocketServer(9000);
+            Status.Text = "Tcp Server on port 9000";
+            tcpServer.OnError += tcpServer_OnError;
+            tcpServer.OnDataReceived += tcpServer_OnDataReceived;
+            tcpServer.OnConnected += tcpServer_OnConnected;
+            Status.Text = "Tcp Server event handlers ready";
+            tcpServer.Start();
+           
+        }
+
+        private void tcpSendData(string Data)
+        {
+            if (tcpServer.connected)
+            {
+                tcpServer.Send(Data);
+            }
+        }
+
+        private void tcpServer_OnConnected(string data)
+        {
+            Status.Text = data;
+        }
+
+        private void tcpServer_OnDataReceived(string data)
+        {
+            Status.Text = data; // client sends back command + ok
+
+        }
+
+        private void tcpServer_OnError(string message)
+        {
+            Status.Text = message;
         }
 
     }

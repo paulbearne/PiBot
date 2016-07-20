@@ -160,27 +160,29 @@ namespace TouchPanels.Algorithms
 			result.s0 = Math.Sqrt(s0) / (this._inputs.Count);
 			return result;
 		}
-		/// <summary>
-		/// Calculates the four helmert transformation parameters {a,b,c,d} and the sum of the squares of the residuals (s0)
-		/// </summary>
-		/// <remarks>
-		/// <para>
-		/// a,b defines scale vector 1 of coordinate system, d,e scale vector 2.
-		/// c,f defines offset.
-		/// </para>
-		/// <para>
-		/// Converting from input (X,Y) to output coordinate system (X',Y') is done by:
-		/// X' = a*X + b*Y + c, Y' = -b*X + a*Y + d
-		/// </para>
-		/// <para>This is a transformation initially based on the affine transformation but slightly simpler.</para>
-		/// </remarks>
-		/// <returns>Array with the four transformation parameters, and sum of squared residuals: a,b,c,d,s0</returns>
-		public HelmertTransformationParameters GetHelmertTransformation() 
+        /// <summary>
+        /// Calculates the four helmert transformation parameters {a,b,c,d} and the sum of the squares of the residuals (s0)
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// a,b defines scale vector 1 of coordinate system, d,e scale vector 2.
+        /// c,f defines offset.
+        /// </para>
+        /// <para>
+        /// Converting from input (X,Y) to output coordinate system (X',Y') is done by:
+        /// X' = a*X + b*Y + c, Y' = -b*X + a*Y + d
+        /// </para>
+        /// <para>This is a transformation initially based on the affine transformation but slightly simpler.</para>
+        /// </remarks>
+        /// <returns>Array with the four transformation parameters, and sum of squared residuals: a,b,c,d,s0</returns>
+        // don't use this function as returns an incorrect transformation
+        public HelmertTransformationParameters GetHelmertTransformation() 
 		{
-			throw new NotSupportedException("This method returns an incorrect transformation - do not use");
-			if (_inputs.Count < 2)
-				throw(new System.Exception("At least 2 measurements required to calculate helmert transformation"));
-			
+			//throw new NotSupportedException("This method returns an incorrect transformation - do not use");
+            if (_inputs.Count < 2)
+            {
+                throw (new System.Exception("At least 2 measurements required to calculate helmert transformation"));
+            }
 			double b00=0;
 			double b02=0;
 			double b03=0;

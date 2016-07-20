@@ -19,13 +19,13 @@ namespace TouchPanels
 	public sealed class TouchProcessor : DependencyObject
 	{
 		private ITouchDevice device;
-        private CancellationTokenSource threadCancelSource = new CancellationTokenSource();
+		private CancellationTokenSource threadCancelSource = new CancellationTokenSource();
 		private bool penPressed;
 
 		public TouchProcessor(ITouchDevice device)
 		{
-            if (device == null)
-                throw new ArgumentNullException(nameof(device));
+			if (device == null)
+				throw new ArgumentNullException(nameof(device));
 			this.device = device;
 		}
 
@@ -71,7 +71,7 @@ namespace TouchPanels
 		}
 
 		private event EventHandler<PointerEventArgs> _PointerMoved;
-        public event EventHandler<PointerEventArgs> PointerMoved
+		public event EventHandler<PointerEventArgs> PointerMoved
 		{
 			add
 			{
@@ -142,7 +142,7 @@ namespace TouchPanels
 			{
 				threadCancelSource.Cancel();
 				threadCancelSource = null;
-            }
+			}
 		}
 	}
 }
