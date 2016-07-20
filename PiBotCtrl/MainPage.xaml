@@ -1,0 +1,160 @@
+﻿<Page x:Class="PiBotCtrl.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:RobbyBotMk2"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d">
+
+    <Grid Width="800"
+          Height="480"
+          Margin="0,0,-160,-120"
+          HorizontalAlignment="Left"
+          VerticalAlignment="Top"
+          Background="#FFC8C8C8">
+        <Button x:Name="btnPower"
+                Width="142"
+                Height="137"
+                Margin="579,315,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="btnPower_Click"
+                ClickMode="Press">
+            <Button.Background>
+                <ImageBrush ImageSource="Assets/onoffbtnoff.png" Stretch="Fill" />
+            </Button.Background>
+        </Button>
+        <Button x:Name="btnDance"
+                Width="133"
+                Height="133"
+                Margin="598,127,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="btnDance_Click"
+                ClickMode="Press"
+                Content="">
+            <Button.Background>
+                <ImageBrush ImageSource="Assets/btdancedepressed.png" Stretch="Fill" />
+            </Button.Background>
+        </Button>
+        <Image x:Name="image"
+               Width="136"
+               Height="124"
+               Margin="25,322,0,0"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Top"
+               Source="Assets/bratblk.png" />
+        <Button x:Name="btnRight"
+                Width="100"
+                Height="100"
+                Margin="280,146,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="btnRight_Click"
+                ClickMode="Press">
+            <Button.Background>
+                <ImageBrush ImageSource="Assets/btnavrightdepressed.png" Stretch="Fill" />
+            </Button.Background>
+        </Button>
+        <Button x:Name="btnLeft"
+                Width="100"
+                Height="100"
+                Margin="81,145,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="btnLeft_Click"
+                ClickMode="Press"
+                Content="">
+            <Button.Background>
+                <ImageBrush ImageSource="Assets/btnavleftpressed.png" Stretch="Fill" />
+            </Button.Background>
+        </Button>
+        <Button x:Name="btnDown"
+                Width="100"
+                Height="100"
+                Margin="181,247,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="btnDown_Click"
+                ClickMode="Press"
+                Content="">
+            <Button.Background>
+                <ImageBrush ImageSource="Assets/btnavdowndepressed.png" Stretch="Fill" />
+            </Button.Background>
+        </Button>
+        <Button x:Name="btnUp"
+                Width="100"
+                Height="100"
+                Margin="181,46,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="btnUp_Click"
+                ClickMode="Press"
+                Content="">
+            <Button.Background>
+                <ImageBrush ImageSource="Assets/btnavupdepressed.png" Stretch="Fill" />
+            </Button.Background>
+        </Button>
+        <Button x:Name="btnOk"
+                Width="100"
+                Height="100"
+                Margin="181,146,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="btnOk_Click"
+                ClickMode="Press"
+                Content="">
+            <Button.Background>
+                <ImageBrush ImageSource="Assets/btnupokdepressed.png" Stretch="Fill" />
+            </Button.Background>
+        </Button>
+        <Button x:Name="btnKick"
+                Width="133"
+                Height="133"
+                Margin="462,128,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="btnKick_Click"
+                ClickMode="Press"
+                Content="">
+            <Button.Background>
+                <ImageBrush ImageSource="Assets/btkickdepressed.png" Stretch="Fill" />
+            </Button.Background>
+        </Button>
+        <Button x:Name="btnCal"
+                Width="100"
+                Height="100"
+                Margin="471,355,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="btnCal_Click"
+                ClickMode="Press"
+                Content="CAL"
+                FontWeight="Bold"
+                Foreground="#FF0505A2">
+            <Button.Background>
+                <ImageBrush ImageSource="Assets/btnup.png" Stretch="Fill" />
+            </Button.Background>
+        </Button>
+        <Image x:Name="image1"
+               Width="338"
+               Height="100"
+               Margin="414,25,0,0"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Top"
+               Source="Assets/lcd.png"
+               Stretch="Fill" />
+        <TextBlock x:Name="Status"
+                   Width="282"
+                   Height="55"
+                   Margin="439,48,79,0"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   FontWeight="Bold"
+                   Foreground="#FFF7F70D"
+                   Text="TextBlock is a long one to see if it wraps but did not have enough c haracters "
+                   TextAlignment="Center"
+                   TextWrapping="Wrap" />
+
+    </Grid>
+</Page>
