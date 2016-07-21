@@ -155,6 +155,9 @@
                    Text="TextBlock is a long one to see if it wraps but did not have enough c haracters "
                    TextAlignment="Center"
                    TextWrapping="Wrap" />
+        <MediaElement x:Name="audio"
+                      Width="100"
+                      Height="10" />
 
     </Grid>
 </Page>

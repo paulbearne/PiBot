@@ -1,5 +1,4 @@
-﻿using ServerSocket;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,6 +34,7 @@ namespace PiBotCtrl
         private TouchPanels.TouchProcessor processor;
         private Point lastPosition = new Point(double.NaN, double.NaN);
         private CmdServer udpServer; // tcp server
+        private Speech voice;
 
         public MainPage()
         {
@@ -44,9 +44,11 @@ namespace PiBotCtrl
     
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            voice = new Speech(audio);
             initTouch();
             startServer();
             Status.Text = "Controller Initialised waiting for connection";
+            voice.say("Marvin Controller ready so get a move on and connect to me");
             base.OnNavigatedTo(e);
         }
 
@@ -139,48 +141,57 @@ namespace PiBotCtrl
 
         private void btnDance_Click(object sender, RoutedEventArgs e)
         {
-            Status.Text = "Dance Click";
-           
+            Status.Text = "Oh No i think i broke it";
+            voice.say(Status.Text);
+
+
         }
        
         private void btnUp_Click(object sender, RoutedEventArgs e)
         {
             Status.Text = "Up Click";
+            voice.say(Status.Text);
         }
 
         private void btnDown_Click(object sender, RoutedEventArgs e)
         {
             Status.Text = "Down Click";
-            
+            voice.say(Status.Text);
+
         }
 
         private void btnLeft_Click(object sender, RoutedEventArgs e)
         {
             Status.Text = "Left Click";
-            
+            voice.say(Status.Text);
+
         }
 
         private void btnRight_Click(object sender, RoutedEventArgs e)
         {
             Status.Text = "Right Click";
-            
+            voice.say(Status.Text);
+
         }
 
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
             Status.Text = "Ok Click";
-            
+            voice.say(Status.Text);
+
         }
 
         private void btnKick_Click(object sender, RoutedEventArgs e)
         {
             Status.Text = "Kick Click";
+            voice.say("Oh be quiey t women i am having fun which is not easy for a depressed robot");
 
         }
 
         private void btnPower_Click(object sender, RoutedEventArgs e)
         {
             Status.Text = "Power Click";
+            voice.say(Status.Text);
         }
 
         private IScrollProvider FindElementsToInvoke(Point screenPosition)
@@ -232,9 +243,9 @@ namespace PiBotCtrl
         private void startServer()
         {
             udpServer = new CmdServer(9000);
-            Status.Text = "Tcp Server on port 9000";
+            Status.Text = "udp Server on port 9000";
             udpServer.OnDataReceived += udpServer_OnDataReceived;
-            Status.Text = "Tcp Server event handlers ready";
+            Status.Text = "udp Server event handlers ready";
            // tcpServer.Start();
            
         }
@@ -245,9 +256,10 @@ namespace PiBotCtrl
 
         }
 
-        private void tcpServer_OnError(string message)
+        private void udpServer_OnError(string message)
         {
             Status.Text = message;
+            voice.say("oh no somethings broken"+Status.Text);
         }
 
     }

@@ -15,7 +15,7 @@ using Windows.Media.Capture;
 
 namespace SpeechAndTTS
 {
-    public class AudioCapturePermissions
+    public class AudioPermissions
     {
         // If no recording device is attached, attempting to get access to audio capture devices will throw 
         // a System.Exception object, with this HResult set.
