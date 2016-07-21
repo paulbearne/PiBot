@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using TouchPanels.Devices;
+using udpserver;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
@@ -33,7 +34,7 @@ namespace PiBotCtrl
         private Tsc2046 tsc2046;
         private TouchPanels.TouchProcessor processor;
         private Point lastPosition = new Point(double.NaN, double.NaN);
-        private SocketServer tcpServer; // tcp server
+        private CmdServer udpServer; // tcp server
 
         public MainPage()
         {
@@ -110,7 +111,7 @@ namespace PiBotCtrl
         }
         private void WriteStatus(TouchPanels.PointerEventArgs args, string type)
         {
-            Status.Text = $"{type}\nPosition: {args.Position.X},{args.Position.Y}\nPressure:{args.Pressure}";
+           // Status.Text = $"{type}\nPosition: {args.Position.X},{args.Position.Y}\nPressure:{args.Pressure}";
         }
 
         private async void btnCal_Click(object sender, RoutedEventArgs e)
@@ -230,30 +231,15 @@ namespace PiBotCtrl
 
         private void startServer()
         {
-            tcpServer = new SocketServer(9000);
+            udpServer = new CmdServer(9000);
             Status.Text = "Tcp Server on port 9000";
-            tcpServer.OnError += tcpServer_OnError;
-            tcpServer.OnDataReceived += tcpServer_OnDataReceived;
-            tcpServer.OnConnected += tcpServer_OnConnected;
+            udpServer.OnDataReceived += udpServer_OnDataReceived;
             Status.Text = "Tcp Server event handlers ready";
-            tcpServer.Start();
+           // tcpServer.Start();
            
         }
 
-        private void tcpSendData(string Data)
-        {
-            if (tcpServer.connected)
-            {
-                tcpServer.Send(Data);
-            }
-        }
-
-        private void tcpServer_OnConnected(string data)
-        {
-            Status.Text = data;
-        }
-
-        private void tcpServer_OnDataReceived(string data)
+        private void udpServer_OnDataReceived(string data)
         {
             Status.Text = data; // client sends back command + ok
 
