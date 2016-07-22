@@ -5,22 +5,9 @@
       xmlns:local="using:pibot"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d">
-
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="9*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <TextBox x:Name="Status"
-                 Grid.Row="0"
-                 Grid.RowSpan="2"
-                 Height="37"
-                 VerticalAlignment="Top"
-                 IsHitTestVisible="True"
-                 TextWrapping="Wrap" />
-
-    </Grid>
+    <MediaElement x:Name="audio"
+                  Width="360"
+                  Height="640"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top" />
 </Page>

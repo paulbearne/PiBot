@@ -8,7 +8,7 @@ using Windows.Media.SpeechSynthesis;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace PiBotCtrl
+namespace PiBot
 {
     public sealed partial class Speech
     {

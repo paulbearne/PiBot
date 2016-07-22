@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using TouchPanels.Devices;
-using udpserver;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
