@@ -14,12 +14,24 @@ namespace PiBot
     {
         private SpeechSynthesizer synthesizer;
         private MediaElement media;
-        
+
+        public delegate void speechComplete();
+        public event speechComplete OnComplete;
+
 
         public Speech(MediaElement parentmedia)
         {
             media = parentmedia;
+            media.MediaEnded += Media_MediaEnded;
             synthesizer = new SpeechSynthesizer();
+        }
+
+        private void Media_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            if (OnComplete != null)
+            {
+                OnComplete();
+            }
         }
 
         public void say(string text)
@@ -68,10 +80,6 @@ namespace PiBot
             }
         }
 
-        void media_MediaEnded(object sender, RoutedEventArgs e)
-        {
-
-        }
             
     }
 }
