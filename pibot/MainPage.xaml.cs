@@ -1,4 +1,5 @@
-﻿using PiBot;
+﻿using BratPiBot;
+using PiBot;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,6 +37,7 @@ namespace pibot
         MAESTRO_CONNECT,
         MAESTRO_CONNECT_WAIT,
         CONFIG_SERVOS,
+        SERVOS_CONNECT,
         CONFIG_SERVOS_WAIT,
         CONNECT_REMOTE,
         CONNECT_REMOTE_WAIT,
@@ -89,9 +91,17 @@ namespace pibot
                         servoCtrl.OnConnected += ServoCtrl_OnConnected;
                         moveNextStep = false;
                         audioComplete = false;
-                        systemState = controlState.CONFIG_SERVOS_WAIT;
+                        systemState = controlState.SERVOS_CONNECT;
+                        break;
+                    case controlState.SERVOS_CONNECT:
+                        if (servoCtrl.commandPortReady())
+                        {
+                           servoCtrl.connect();
+                           systemState = controlState.CONFIG_SERVOS_WAIT;
+                        }
                         break;
                     case controlState.CONFIG_SERVOS_WAIT:
+                        
                         if (moveNextStep && audioComplete)
                             systemState = controlState.CONNECT_REMOTE;
                         break;
@@ -156,9 +166,10 @@ namespace pibot
 
         }
 
-        
-
-
-
+        private void btnComms_Click(object sender, RoutedEventArgs e)
+        {
+            
+            
+        }
     }
 }

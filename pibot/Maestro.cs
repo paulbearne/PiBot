@@ -63,18 +63,19 @@ namespace pibot
 					// find our command and data port vendor id VID_1FFB MI_02 TTL MI_00
 					if ((comportinfo.Id.IndexOf("VID_1FFB") > -1) && (comportinfo.Id.IndexOf("MI_02") > -1))
 					{
-						cmdPort = await SerialDevice.FromIdAsync(comportinfo.Id).AsTask();
+						cmdPort = await SerialDevice.FromIdAsync(comportinfo.Id);
 						// Create the DataWriter object and attach to OutputStream
 						//dataWriteObject = new DataWriter(cmdPort.OutputStream);
+											
 						maestroPresent = true;
-						connect();
+						
 
 					}
 
 					if ((comportinfo.Id.IndexOf("VID_1FFB") > -1) && (comportinfo.Id.IndexOf("MI_00") > -1))
 					{
 						ttlPort = await SerialDevice.FromIdAsync(comportinfo.Id);
-						maestroPresent = true;
+						//maestroPresent = true;
 
 					}
 				}
@@ -87,7 +88,7 @@ namespace pibot
 		}
 
 		/// <param name="e"></param>
-		private void connect()
+		public void connect()
 		{
 		   
 				try
@@ -128,6 +129,11 @@ namespace pibot
 					maestroError = ex.Message;
 				}
 			
+		}
+
+		public bool commandPortReady()
+		{
+			return cmdPort != null;
 		}
 
 		public void clearErrorMessage()

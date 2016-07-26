@@ -5,9 +5,8 @@
       xmlns:local="using:pibot"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d">
-    <MediaElement x:Name="audio"
-                  Width="360"
-                  Height="640"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Top" />
+    <RelativePanel HorizontalAlignment="Left" Height="768" VerticalAlignment="Top" Width="1024">
+        <MediaElement x:Name="audio" HorizontalAlignment="Left" VerticalAlignment="Top" Height="127" Margin="8,633,-242,-759" Width="235" RenderTransformOrigin="0.369,5.752"/>
+        <StackPanel HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0"/>
+    </RelativePanel>
 </Page>
