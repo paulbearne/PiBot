@@ -10,6 +10,7 @@ using Windows.Devices.Enumeration;
 using Windows.Devices.SerialCommunication;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Capture;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -29,10 +30,12 @@ namespace UWPBiped
     public sealed partial class HomePage : Page
     {
         private SerialDevice serialPort = null;
+        private MediaCapture headCapture;
         DataWriter dataWriteObject = null;
         DataReader dataReaderObject = null;
         private ObservableCollection<DeviceInformation> listOfDevices;
         private CancellationTokenSource ReadCancellationTokenSource;
+       
 
         public HomePage()
         {
@@ -40,7 +43,141 @@ namespace UWPBiped
             controlState(false);
             listOfDevices = new ObservableCollection<DeviceInformation>();
             ListAvailablePorts();
+            servoLeftHip.PointerReleased += ServoLeftHip_PointerReleased;
+            servoLeftHip.Tapped += ServoLeftHip_Tapped;
+            servoLeftLeg.PointerReleased += ServoLeftLeg_PointerReleased;
+            servoLeftLeg.Tapped += ServoLeftLeg_Tapped;
+            servoLeftAnkle.PointerReleased += ServoLeftAnkle_PointerReleased;
+            servoLeftAnkle.Tapped += ServoLeftAnkle_Tapped;
+            servoRightHip.PointerReleased += ServoRightHip_PointerReleased;
+            servoRightHip.Tapped += ServoRightHip_Tapped;
+            servoRightLeg.PointerReleased += ServoRightLeg_PointerReleased;
+            servoRightLeg.Tapped += ServoRightLeg_Tapped;
+            servoRightAnkle.PointerReleased += ServoRightAnkle_PointerReleased;
+            servoRightAnkle.Tapped += ServoRightAnkle_Tapped;
+            // start camera for obstacle avoidance
+            
         }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            initHead(); // restart head
+            base.OnNavigatedTo(e);
+        }
+        private async void initHead()
+        {
+            headCapture = new MediaCapture();
+            await headCapture.InitializeAsync();
+
+            // Set callbacks for failure and recording limit exceeded
+            headCapture.Failed += new MediaCaptureFailedEventHandler(headCapture_Failed);
+            headCapture.RecordLimitationExceeded += new Windows.Media.Capture.RecordLimitationExceededEventHandler(headCapture_RecordLimitExceeded);
+
+            // Start Preview                
+            headElement.Source = headCapture;
+            await headCapture.StartPreviewAsync();
+        }
+
+        private void headCapture_RecordLimitExceeded(MediaCapture sender)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async void cleanup()
+        {
+            if (headCapture != null)
+            {
+                await headCapture.StopPreviewAsync();
+                headCapture.Dispose();
+                headCapture = null;
+            }
+        }
+
+        private async void headCapture_Failed(MediaCapture sender, MediaCaptureFailedEventArgs errorEventArgs)
+        {
+            try
+            {
+                tbStatus.Text = "MediaCaptureFailed: ";
+                await headCapture.StopRecordAsync();
+                
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                tbStatus.Text += "\nCheck if camera is diconnected. Try re-launching the app";
+            }
+        }
+
+        //todo add calibration and start servos at there calibrated start position
+
+        private void ServoRightLeg_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            setTarget(4, (UInt16)servoRightLeg.Value);
+        }
+
+        private void ServoRightHip_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            setTarget(3, (UInt16)servoRightHip.Value);
+        }
+
+        private void ServoRightAnkle_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            setTarget(5, (UInt16)servoRightAnkle.Value);
+        }
+
+        private void ServoLeftAnkle_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            setTarget(2, (UInt16)servoLeftLeg.Value);
+        }
+
+        private void ServoLeftLeg_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            setTarget(1, (UInt16)servoLeftLeg.Value);
+        }
+
+        private void ServoLeftHip_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            setTarget(0, (UInt16)servoLeftHip.Value);
+        }
+
+        private void ServoRightAnkle_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            setTarget(5, (UInt16)servoRightAnkle.Value);
+        }
+
+        private void ServoRightLeg_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            setTarget(4, (UInt16)servoRightLeg.Value);
+        }
+
+        private void ServoRightHip_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            setTarget(3, (UInt16)servoRightHip.Value);
+        }
+
+        private void ServoLeftAnkle_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            setTarget(2, (UInt16)servoLeftAnkle.Value);
+        }
+
+        private void ServoLeftLeg_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            setTarget(1, (UInt16)servoLeftLeg.Value);
+        }
+
+        private void ServoLeftHip_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            setTarget(0, (UInt16)servoLeftHip.Value);
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            cleanup(); // release camera
+            base.OnNavigatedFrom(e);
+        }
+
 
         private async void writeBytes(byte[] data)
         {
@@ -143,6 +280,20 @@ namespace UWPBiped
             }
         }
 
+        private void closeComPort()
+        {
+            if (serialPort != null)
+            {
+                serialPort.Dispose();
+            }
+            serialPort = null;
+
+            //btnConnect.IsEnabled = true;
+            controlState(false);
+            listOfDevices.Clear();
+            //cleanup();
+        }
+
         private void closeDevice()
         {
             if (serialPort != null)
@@ -154,6 +305,7 @@ namespace UWPBiped
             //btnConnect.IsEnabled = true;
             controlState(false);
             listOfDevices.Clear();
+            cleanup();
         }
 
         private async Task ReadAsync(CancellationToken cancellationToken)
@@ -202,7 +354,7 @@ namespace UWPBiped
                 {
                     tbStatus.Text = "";
                     cancelReadTask();
-                    closeDevice();
+                    closeComPort();
                     ListAvailablePorts();
                 }
                 catch (Exception ex)
@@ -265,5 +417,25 @@ namespace UWPBiped
                 //sendTextButton.IsEnabled = false;
             }
         }
+
+        public bool setTarget(byte channelNumber, UInt16 target)
+        {
+            byte[] command = new byte[4];
+            byte[] targetBytes = BitConverter.GetBytes(target);
+            Array.Reverse(targetBytes);
+                  
+
+            command[0] = 0x84;
+            command[1] = channelNumber;
+            command[2] = targetBytes[0];
+            command[3] = targetBytes[1];
+            writeBytes(command);
+
+            return true;
+
+        }
+
+
+
     }
 }

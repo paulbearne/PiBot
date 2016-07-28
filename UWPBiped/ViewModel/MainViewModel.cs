@@ -22,7 +22,26 @@ namespace UWPBiped.ViewModel
                     Text = "Home",
                     ButtonText = "\uE80F",
                     Command = new RelayCommand(() => NavigateTo("Home"), () => ActivePage != "Home" )
+                },
+                new NavItem()
+                {
+                    Text = "Audio",
+                    ButtonText = "\uE767",
+                    Command = new RelayCommand(() => NavigateTo("Audio"), () => ActivePage != "Audio" )
+                },
+                new NavItem()
+                {
+                    Text = "Camera",
+                    ButtonText = "\uE714",
+                    Command = new RelayCommand(() => NavigateTo("Camera"), () => ActivePage != "Camera" )
+                },
+                new NavItem()
+                {
+                    Text = "Speech",
+                    ButtonText = "\uE720",
+                    Command = new RelayCommand(() => NavigateTo("Speech"), () => ActivePage != "Speech" )
                 }
+
             };
 
             SecondaryNavItems = new ObservableCollection<NavItem>()

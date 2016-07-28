@@ -53,74 +53,155 @@
                         Orientation="Vertical"
                         Value="20" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Vertical">
                 <StackPanel.Background>
                     <ImageBrush ImageSource="Assets/brat03.jpg" Stretch="Fill" />
                 </StackPanel.Background>
-                <StackPanel Width="200"
-                            Margin="10,0,100,0"
-                            VerticalAlignment="Top"
-                            Orientation="Vertical">
-                    <Slider x:Name="servoLeftHip"
-                            Margin="0,45,0,0"
-                            Background="#66EC3B43"
-                            Maximum="2500"
-                            Minimum="500"
-                            Padding="0,60,0,0"
-                            Value="1500" />
-                    <Slider x:Name="servoLeftLeg"
-                            Margin="0,40,0,0"
-                            Background="#66EC3B43"
-                            Maximum="2500"
-                            Minimum="500"
-                            Value="1500" />
-                    <Slider x:Name="servoLeftAnkle"
-                            Margin="0,40,0,0"
-                            Background="#66EC3B43"
-                            Maximum="2500"
-                            Minimum="500"
-                            Value="1500" />
+                <StackPanel Height="100" Orientation="Horizontal">
+                    <StackPanel Width="220"
+                                Height="100"
+                                VerticalAlignment="Bottom"
+                                Orientation="Vertical"
+                                Padding="0,0,20,0">
+                        <TextBlock x:Name="tbDistanceLabel"
+                                   HorizontalAlignment="Center"
+                                   Foreground="#FF088AF7"
+                                   Text=""
+                                   TextWrapping="Wrap" />
+                        <StackPanel Height="20px"
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal">
+                            <TextBlock Name="tbHeadDistance"
+                                       HorizontalAlignment="Right"
+                                       Foreground="#FF045AF0"
+                                       Text="0.0" />
+                            <TextBlock HorizontalAlignment="Right"
+                                       Foreground="#FF2568DC"
+                                       Text="cm" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <Canvas x:Name="HeadCanvas"
+                                Width="100"
+                                Height="100"
+                                Margin="0,0,0,0"
+                                Background="Gray"
+                                Visibility="Visible">
+                            <CaptureElement x:Name="headElement"
+                                            Width="100"
+                                            Height="100"
+                                            HorizontalAlignment="Left"
+                                            Visibility="Visible" />
+                        </Canvas>
+                    </StackPanel>
+                    <StackPanel Width="220"
+                                Height="100"
+                                VerticalAlignment="Bottom"
+                                Orientation="Vertical"
+                                Padding="20,0,0,0">
+                        <TextBlock x:Name="tbVoltageLabel"
+                                   HorizontalAlignment="Center"
+                                   Foreground="#FF088AF7"
+                                   Text=""
+                                   TextWrapping="Wrap" />
+                        <StackPanel Height="20px"
+                                    HorizontalAlignment="Left"
+                                    Orientation="Horizontal">
+                            <TextBlock Name="tbBatteryVoltage"
+                                       HorizontalAlignment="Left"
+                                       Foreground="#FF045AF0"
+                                       Text="0.0" />
+                            <TextBlock HorizontalAlignment="Left"
+                                       Foreground="#FF2568DC"
+                                       Text="V" />
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel Width="200"
-                            Margin="0,0,0,0"
-                            VerticalAlignment="Top"
-                            BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}"
-                            Orientation="Vertical">
-                    <Slider x:Name="servoRightHip"
-                            Margin="0,45,0,0"
-                            Background="#66EC3B43"
-                            IsDirectionReversed="True"
-                            Maximum="2500"
-                            Minimum="500"
-                            Padding="0,60,0,0"
-                            Value="1500" />
-                    <Slider x:Name="servoRightLeg"
-                            Margin="0,40,0,0"
-                            Background="#66EC3B43"
-                            IsDirectionReversed="True"
-                            Maximum="2500"
-                            Minimum="500"
-                            Value="1500" />
-                    <Slider x:Name="servoRightAnkle"
-                            Margin="0,40,0,0"
-                            Background="#66EC3B43"
-                            IsDirectionReversed="True"
-                            Maximum="2500"
-                            Minimum="500"
-                            Value="1500" />
+                <StackPanel Orientation="Horizontal">
+
+                    <StackPanel Width="203"
+                                Margin="10,0,100,0"
+                                VerticalAlignment="Top"
+                                Orientation="Vertical">
+                        <Slider x:Name="servoLeftHip"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                Maximum="2500"
+                                Minimum="500"
+                                Padding="0,10,0,0"
+                                Value="1500" />
+                        <Slider x:Name="servoLeftLeg"
+                                Margin="0,40,0,0"
+                                Background="#663BDCEC"
+                                Maximum="2500"
+                                Minimum="500"
+                                Value="1500" />
+                        <Slider x:Name="servoLeftAnkle"
+                                Margin="0,40,0,0"
+                                Background="#663BDCEC"
+                                Maximum="2500"
+                                Minimum="500"
+                                Value="1500" />
+                        <StackPanel Height="20px"
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal">
+                            <TextBlock Name="tbLeftFootDistance"
+                                       HorizontalAlignment="Right"
+                                       Foreground="#FF045AF0"
+                                       Text="0.0" />
+                            <TextBlock HorizontalAlignment="Right"
+                                       Foreground="#FF2568DC"
+                                       Text="cm" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Width="225"
+                                Margin="10,0,0,0"
+                                VerticalAlignment="Top"
+                                BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}"
+                                Orientation="Vertical">
+                        <Slider x:Name="servoRightHip"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                IsDirectionReversed="True"
+                                Maximum="2500"
+                                Minimum="500"
+                                Padding="0,10,0,0"
+                                Value="1500" />
+                        <Slider x:Name="servoRightLeg"
+                                Margin="0,40,0,0"
+                                Background="#663BDCEC"
+                                IsDirectionReversed="True"
+                                Maximum="2500"
+                                Minimum="500"
+                                Value="1500" />
+                        <Slider x:Name="servoRightAnkle"
+                                Margin="0,40,0,0"
+                                Background="#663BDCEC"
+                                IsDirectionReversed="True"
+                                Maximum="2500"
+                                Minimum="500"
+                                Value="1500" />
+                        <StackPanel Height="20px" Orientation="Horizontal">
+                            <TextBlock Name="tbRightFootDistance"
+                                       Foreground="#FF045AF0"
+                                       Text="0.0" />
+                            <TextBlock Foreground="#FF2568DC" Text="cm" />
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
             <StackPanel Width="200"
-                        Height="266"
-                        Margin="20,0"
+                        Height="264"
+                        Margin="0"
                         VerticalAlignment="Top"
                         Orientation="Vertical">
                 <Slider x:Name="servoAcceleration"
                         Height="246"
-                        Margin="70,10,0,10"
+                        Margin="50,10,0,10"
                         Orientation="Vertical"
                         Value="20" />
             </StackPanel>
+
         </StackPanel>
         <StackPanel Name="servoLabelsPanel"
                     Height="31"

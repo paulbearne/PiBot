@@ -21,7 +21,10 @@ namespace UWPBiped.ViewModel
             {
                 var nav = new UWPBiped.Service.NavigationService();
                 nav.Configure("Home", typeof(HomePage));
+                nav.Configure("Audio", typeof(SynthesizeTextPage));
+                nav.Configure("Camera", typeof(CameraPage));
                 nav.Configure("Settings", typeof(SettingsPage));
+                nav.Configure("Speech", typeof(SpeechCmdPage));
 
                 return nav;
             });

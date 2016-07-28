@@ -95,11 +95,99 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\de-de\LocalizationSpeechResources.resw">
+      <Link>Strings\de-DE\LocalizationSpeechResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\de-de\LocalizationTTSResources.resw">
+      <Link>Strings\de-DE\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\en-au\LocalizationSpeechResources.resw">
+      <Link>Strings\en-AU\LocalizationSpeechResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\en-au\LocalizationTTSResources.resw">
+      <Link>Strings\en-AU\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\en-ca\LocalizationSpeechResources.resw">
+      <Link>Strings\en-CA\LocalizationSpeechResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\en-ca\LocalizationTTSResources.resw">
+      <Link>Strings\en-CA\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\en-gb\LocalizationSpeechResources.resw">
+      <Link>Strings\en-GB\LocalizationSpeechResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\en-gb\LocalizationTTSResources.resw">
+      <Link>Strings\en-GB\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\en-in\LocalizationSpeechResources.resw">
+      <Link>Strings\en-IN\LocalizationSpeechResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\en-in\LocalizationTTSResources.resw">
+      <Link>Strings\en-IN\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\en-us\LocalizationSpeechResources.resw">
+      <Link>Strings\en-US\LocalizationSpeechResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\en-us\LocalizationTTSResources.resw">
+      <Link>Strings\en-US\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\es-es\LocalizationSpeechResources.resw">
+      <Link>Strings\es-ES\LocalizationSpeechResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\es-es\LocalizationTTSResources.resw">
+      <Link>Strings\es-ES\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\es-mx\LocalizationTTSResources.resw">
+      <Link>Strings\es-MX\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\fr-fr\LocalizationSpeechResources.resw">
+      <Link>Strings\fr-FR\LocalizationSpeechResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\fr-fr\LocalizationTTSResources.resw">
+      <Link>Strings\fr-FR\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\it-it\LocalizationSpeechResources.resw">
+      <Link>Strings\it-IT\LocalizationSpeechResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\it-it\LocalizationTTSResources.resw">
+      <Link>Strings\it-IT\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\ja-jp\LocalizationTTSResources.resw">
+      <Link>Strings\ja-JP\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\ko-kr\LocalizationTTSResources.resw">
+      <Link>Strings\ko-KR\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\pl-pl\LocalizationTTSResources.resw">
+      <Link>Strings\pl-PL\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\pt-br\LocalizationTTSResources.resw">
+      <Link>Strings\pt-BR\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\ru-ru\LocalizationTTSResources.resw">
+      <Link>Strings\ru-RU\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\zh-cn\LocalizationSpeechResources.resw">
+      <Link>Strings\zh-CN\LocalizationSpeechResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\zh-cn\LocalizationTTSResources.resw">
+      <Link>Strings\zh-CN\LocalizationTTSResources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\zh-tw\LocalizationTTSResources.resw">
+      <Link>Strings\zh-TW\LocalizationTTSResources.resw</Link>
+    </PRIResource>
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AudioPermissions.cs" />
+    <Compile Include="CameraPage.xaml.cs">
+      <DependentUpon>CameraPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SpeechCmdPage.xaml.cs">
+      <DependentUpon>SpeechCmdPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\AboutControl.xaml.cs">
       <DependentUpon>AboutControl.xaml</DependentUpon>
@@ -129,6 +217,9 @@
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SynthesizeTextPage.xaml.cs">
+      <DependentUpon>SynthesizeTextPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
@@ -157,6 +248,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="CameraPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SpeechCmdPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\AboutControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -176,6 +275,10 @@
     <Page Include="SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SynthesizeTextPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

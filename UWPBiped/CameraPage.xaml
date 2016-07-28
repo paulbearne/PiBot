@@ -1,0 +1,214 @@
+﻿<!--
+    Copyright(c) Microsoft Open Technologies, Inc. All rights reserved.
+    The MIT License(MIT)
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files(the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and / or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions :
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+<Page x:Class="UWPBiped.CameraPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:UWPBiped"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition />
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="pageTitle"
+                   Grid.Row="0"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   IsHitTestVisible="false"
+                   Style="{StaticResource HeaderTextBlockStyle}"
+                   Text="Web Camera Sample"
+                   TextWrapping="NoWrap" />
+
+        <StackPanel x:Name="ContentRoot"
+                    Grid.Row="1"
+                    Margin="12,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+            <Button x:Name="video_init"
+                    Width="180"
+                    Margin="0,0,30,20"
+                    HorizontalAlignment="Left"
+                    Click="initVideo_Click"
+                    Content="Initialize Audio/Video" />
+            <Button x:Name="audio_init"
+                    Width="120"
+                    Margin="0,0,30,20"
+                    Click="initAudioOnly_Click"
+                    Content="Initialize Audio Only" />
+            <Button x:Name="cleanup"
+                    Width="120"
+                    Margin="0,0,30,20"
+                    Click="cleanup_Click"
+                    Content="Close Camera" />
+        </StackPanel>
+
+        <StackPanel x:Name="ContentRootActions"
+                    Grid.Row="2"
+                    Margin="12,0,12,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+            <Button x:Name="takePhoto"
+                    Width="120"
+                    Margin="0,0,30,0"
+                    Click="takePhoto_Click"
+                    Content="Take Photo"
+                    IsEnabled="False"
+                    Visibility="Collapsed" />
+            <Button x:Name="recordVideo"
+                    Width="150"
+                    Margin="0,0,30,0"
+                    Click="recordVideo_Click"
+                    Content="Start Video Record"
+                    IsEnabled="False"
+                    Visibility="Collapsed" />
+            <Button x:Name="recordAudio"
+                    Width="150"
+                    Margin="0,0,0,0"
+                    Click="recordAudio_Click"
+                    Content="Start Audio Record"
+                    IsEnabled="False"
+                    Visibility="Collapsed" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="3"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+            <StackPanel>
+                <TextBlock Name="PreviewTitle"
+                           Grid.Row="0"
+                           Grid.Column="0"
+                           Height="30"
+                           Margin="0,20,0,0"
+                           HorizontalAlignment="Center"
+                           Text="Preview"
+                           Visibility="Visible" />
+                <Canvas Name="PreviewCanvas"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Width="200"
+                        Height="200"
+                        Margin="0,0,0,0"
+                        Background="Gray"
+                        Visibility="Visible">
+                    <CaptureElement x:Name="previewElement"
+                                    Width="200"
+                                    Height="200"
+                                    HorizontalAlignment="Left"
+                                    Visibility="Visible" />
+                </Canvas>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Name="ImageTitle"
+                           Grid.Row="0"
+                           Grid.Column="1"
+                           Height="30"
+                           Margin="0,20,0,0"
+                           HorizontalAlignment="Center"
+                           Text="Last captured photo"
+                           Visibility="Visible" />
+                <Canvas Name="PhotoCanvas"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Width="200"
+                        Height="200"
+                        Margin="20,0,0,0"
+                        Background="Gray"
+                        Visibility="Visible">
+                    <Image x:Name="captureImage"
+                           Width="200"
+                           Height="200"
+                           Visibility="Visible" />
+                </Canvas>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Name="VideoTitle"
+                           Grid.Row="0"
+                           Grid.Column="2"
+                           Height="30"
+                           Margin="0,20,0,0"
+                           HorizontalAlignment="Center"
+                           Text="Last Recorded Video"
+                           Visibility="Visible" />
+                <Canvas Name="VideoCanvas"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Width="200"
+                        Height="200"
+                        Margin="20,0,0,0"
+                        Background="Gray"
+                        Visibility="Visible">
+                    <MediaElement x:Name="playbackElement"
+                                  Width="200"
+                                  Height="200"
+                                  Visibility="Visible" />
+                </Canvas>
+            </StackPanel>
+            <StackPanel>
+                <!--<TextBlock  Grid.Row="0" Grid.Column="3" Text='Last Recorded Audio' Height='30' Margin='10,20,0,0'/>-->
+                <Canvas x:Name="playbackCanvas3"
+                        Grid.Row="1"
+                        Grid.Column="3"
+                        Width="0"
+                        Height="0"
+                        Margin="0,0,0,0">
+                    <MediaElement x:Name="playbackElement3"
+                                  Width="0"
+                                  Height="0" />
+                </Canvas>
+            </StackPanel>
+        </StackPanel>
+
+        <TextBlock Grid.Row="4"
+                   Margin="19,-10,0,0"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   Text="status" />
+        <ScrollViewer Grid.Row="5"
+                      Margin="12,10,12,0"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center">
+            <TextBox x:Name="status"
+                     Width="400"
+                     Height="60"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"
+                     IsReadOnly="True"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     TextWrapping="Wrap" />
+        </ScrollViewer>
+    </Grid>
+</Page>
