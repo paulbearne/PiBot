@@ -1,0 +1,149 @@
+﻿<Page x:Class="UWPBiped.HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:UWPBiped"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d">
+
+    <Page.Resources>
+        <CollectionViewSource x:Name="DeviceListSource" />
+    </Page.Resources>
+
+    <StackPanel Margin="50,0" Background="{ThemeResource AppBarBackgroundThemeBrush}">
+        <StackPanel Orientation="Horizontal">
+            <ToggleSwitch x:Name="btnMaestro"
+                          Margin="0,0,0,0"
+                          HorizontalAlignment="Center"
+                          Header="Maestro Servo Controller"
+                          OffContent="Disconnect"
+                          OnContent="Connect"
+                          Toggled="btnMaestro_Toggled" />
+            <ComboBox x:Name="servoController"
+                      Width="683"
+                      Height="59"
+                      Margin="20,0,0,0"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      ItemsSource="{Binding Source={StaticResource DeviceListSource}}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Id}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+        <TextBlock x:Name="tbStatus"
+                   Margin="0,20,0,0"
+                   FontSize="20"
+                   Text="Status"
+                   TextWrapping="Wrap" />
+        <StackPanel Name="servoPanel"
+                    Height="365"
+                    Margin="0,80,0,0"
+                    Orientation="Horizontal">
+            <StackPanel Width="151"
+                        Height="266"
+                        Margin="20,0,20,0"
+                        VerticalAlignment="Top"
+                        Orientation="Vertical">
+                <Slider x:Name="servoSpeed"
+                        Height="246"
+                        Margin="70,10,36,10"
+                        Orientation="Vertical"
+                        Value="20" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel.Background>
+                    <ImageBrush ImageSource="Assets/brat03.jpg" Stretch="Fill" />
+                </StackPanel.Background>
+                <StackPanel Width="200"
+                            Margin="10,0,100,0"
+                            VerticalAlignment="Top"
+                            Orientation="Vertical">
+                    <Slider x:Name="servoLeftHip"
+                            Margin="0,45,0,0"
+                            Background="#66EC3B43"
+                            Maximum="2500"
+                            Minimum="500"
+                            Padding="0,60,0,0"
+                            Value="1500" />
+                    <Slider x:Name="servoLeftLeg"
+                            Margin="0,40,0,0"
+                            Background="#66EC3B43"
+                            Maximum="2500"
+                            Minimum="500"
+                            Value="1500" />
+                    <Slider x:Name="servoLeftAnkle"
+                            Margin="0,40,0,0"
+                            Background="#66EC3B43"
+                            Maximum="2500"
+                            Minimum="500"
+                            Value="1500" />
+                </StackPanel>
+                <StackPanel Width="200"
+                            Margin="0,0,0,0"
+                            VerticalAlignment="Top"
+                            BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}"
+                            Orientation="Vertical">
+                    <Slider x:Name="servoRightHip"
+                            Margin="0,45,0,0"
+                            Background="#66EC3B43"
+                            IsDirectionReversed="True"
+                            Maximum="2500"
+                            Minimum="500"
+                            Padding="0,60,0,0"
+                            Value="1500" />
+                    <Slider x:Name="servoRightLeg"
+                            Margin="0,40,0,0"
+                            Background="#66EC3B43"
+                            IsDirectionReversed="True"
+                            Maximum="2500"
+                            Minimum="500"
+                            Value="1500" />
+                    <Slider x:Name="servoRightAnkle"
+                            Margin="0,40,0,0"
+                            Background="#66EC3B43"
+                            IsDirectionReversed="True"
+                            Maximum="2500"
+                            Minimum="500"
+                            Value="1500" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Width="200"
+                        Height="266"
+                        Margin="20,0"
+                        VerticalAlignment="Top"
+                        Orientation="Vertical">
+                <Slider x:Name="servoAcceleration"
+                        Height="246"
+                        Margin="70,10,0,10"
+                        Orientation="Vertical"
+                        Value="20" />
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Name="servoLabelsPanel"
+                    Height="31"
+                    Orientation="Horizontal">
+            <TextBlock x:Name="textBlock"
+                       Margin="90,0,0,0"
+                       Text="Speed"
+                       TextWrapping="Wrap" />
+            <TextBlock x:Name="textBlock1"
+                       Margin="120,0,0,0"
+                       Text="Left Leg Servos"
+                       TextWrapping="Wrap" />
+            <TextBlock x:Name="textBlock2"
+                       Margin="200,0,0,0"
+                       Text="Right Leg Servos"
+                       TextWrapping="Wrap" />
+            <TextBlock x:Name="textBlock3"
+                       Margin="110,0,0,0"
+                       Text="Acceleration"
+                       TextWrapping="Wrap" />
+        </StackPanel>
+
+
+        <!--  TODO - This is the main starting UI for your app  -->
+    </StackPanel>
+</Page>
