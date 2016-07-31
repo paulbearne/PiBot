@@ -30,33 +30,44 @@ namespace UWPBiped
     public sealed partial class HomePage : Page
     {
         private SerialDevice serialPort = null;
+        private byte deviceNumber = 0x00;
         private MediaCapture headCapture;
         DataWriter dataWriteObject = null;
         DataReader dataReaderObject = null;
         private ObservableCollection<DeviceInformation> listOfDevices;
         private CancellationTokenSource ReadCancellationTokenSource;
+        private UInt32 bytesRead;
+        private Speech voice;
        
+
 
         public HomePage()
         {
+            
             this.InitializeComponent();
+            AudioElement.Volume = 0.6;
+            voice = new Speech(AudioElement);
+            voice.OnComplete += Voice_OnComplete;
+            voice.say("Pi Bot Control Online");
             controlState(false);
             listOfDevices = new ObservableCollection<DeviceInformation>();
             ListAvailablePorts();
-            servoLeftHip.PointerReleased += ServoLeftHip_PointerReleased;
-            servoLeftHip.Tapped += ServoLeftHip_Tapped;
-            servoLeftLeg.PointerReleased += ServoLeftLeg_PointerReleased;
-            servoLeftLeg.Tapped += ServoLeftLeg_Tapped;
-            servoLeftAnkle.PointerReleased += ServoLeftAnkle_PointerReleased;
-            servoLeftAnkle.Tapped += ServoLeftAnkle_Tapped;
-            servoRightHip.PointerReleased += ServoRightHip_PointerReleased;
-            servoRightHip.Tapped += ServoRightHip_Tapped;
-            servoRightLeg.PointerReleased += ServoRightLeg_PointerReleased;
-            servoRightLeg.Tapped += ServoRightLeg_Tapped;
-            servoRightAnkle.PointerReleased += ServoRightAnkle_PointerReleased;
-            servoRightAnkle.Tapped += ServoRightAnkle_Tapped;
-            // start camera for obstacle avoidance
             
+            // start camera for obstacle avoidance
+
+        
+
+        }
+
+
+        private void Voice_OnComplete()
+        {
+           
+        }
+
+        public void updateStatus(string msg)
+        {
+            tbStatus.Text = msg;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -66,16 +77,41 @@ namespace UWPBiped
         }
         private async void initHead()
         {
-            headCapture = new MediaCapture();
-            await headCapture.InitializeAsync();
-
+            try
+            {
+                headCapture = new MediaCapture();
+                if (headCapture != null)
+                {
+                    await headCapture.InitializeAsync();
+                    // Set callbacks for failure and recording limit exceeded
+                    headCapture.Failed += new MediaCaptureFailedEventHandler(headCapture_Failed);
+                    headCapture.RecordLimitationExceeded += new Windows.Media.Capture.RecordLimitationExceededEventHandler(headCapture_RecordLimitExceeded);
+                }
+            }
+            catch (Exception e)
+            {
+                tbStatus.Text = "init Head Failed " +e;
+                headCapture.Dispose();
+                headCapture = null;
+            }
             // Set callbacks for failure and recording limit exceeded
-            headCapture.Failed += new MediaCaptureFailedEventHandler(headCapture_Failed);
-            headCapture.RecordLimitationExceeded += new Windows.Media.Capture.RecordLimitationExceededEventHandler(headCapture_RecordLimitExceeded);
-
-            // Start Preview                
-            headElement.Source = headCapture;
-            await headCapture.StartPreviewAsync();
+            //headCapture.Failed += new MediaCaptureFailedEventHandler(headCapture_Failed);
+            //headCapture.RecordLimitationExceeded += new Windows.Media.Capture.RecordLimitationExceededEventHandler(headCapture_RecordLimitExceeded);
+            if (headCapture != null)
+            {
+                // Start Preview  
+                try
+                {
+                    headElement.Source = headCapture;
+                    await headCapture.StartPreviewAsync();
+                }
+                catch (Exception e)
+                {
+                    tbStatus.Text = "Preview Start Failed " + e;
+                    headCapture.Dispose();
+                    headCapture = null;
+                }
+            }
         }
 
         private void headCapture_RecordLimitExceeded(MediaCapture sender)
@@ -112,93 +148,66 @@ namespace UWPBiped
 
         //todo add calibration and start servos at there calibrated start position
 
-        private void ServoRightLeg_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            setTarget(4, (UInt16)servoRightLeg.Value);
-        }
 
-        private void ServoRightHip_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            setTarget(3, (UInt16)servoRightHip.Value);
-        }
-
-        private void ServoRightAnkle_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            setTarget(5, (UInt16)servoRightAnkle.Value);
-        }
-
-        private void ServoLeftAnkle_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            setTarget(2, (UInt16)servoLeftLeg.Value);
-        }
-
-        private void ServoLeftLeg_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            setTarget(1, (UInt16)servoLeftLeg.Value);
-        }
-
-        private void ServoLeftHip_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            setTarget(0, (UInt16)servoLeftHip.Value);
-        }
-
-        private void ServoRightAnkle_PointerReleased(object sender, PointerRoutedEventArgs e)
-        {
-            setTarget(5, (UInt16)servoRightAnkle.Value);
-        }
-
-        private void ServoRightLeg_PointerReleased(object sender, PointerRoutedEventArgs e)
-        {
-            setTarget(4, (UInt16)servoRightLeg.Value);
-        }
-
-        private void ServoRightHip_PointerReleased(object sender, PointerRoutedEventArgs e)
-        {
-            setTarget(3, (UInt16)servoRightHip.Value);
-        }
-
-        private void ServoLeftAnkle_PointerReleased(object sender, PointerRoutedEventArgs e)
-        {
-            setTarget(2, (UInt16)servoLeftAnkle.Value);
-        }
-
-        private void ServoLeftLeg_PointerReleased(object sender, PointerRoutedEventArgs e)
-        {
-            setTarget(1, (UInt16)servoLeftLeg.Value);
-        }
-
-        private void ServoLeftHip_PointerReleased(object sender, PointerRoutedEventArgs e)
-        {
-            setTarget(0, (UInt16)servoLeftHip.Value);
-        }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            cleanup(); // release camera
-            base.OnNavigatedFrom(e);
-        }
-
-
-        private async void writeBytes(byte[] data)
+        private async void writeBytes(byte[] data,byte numofbytes)
         {
             Task<UInt32> storeAsyncTask;
-           
-            if (dataWriteObject != null)
-            {
-                // Load the text from the sendText input text box to the dataWriter object
-                dataWriteObject.WriteBytes(data);
-                // Launch an async task to complete the write operation
-                storeAsyncTask = dataWriteObject.StoreAsync().AsTask();
-
-                UInt32 bytesWritten = await storeAsyncTask;
-                if (bytesWritten > 0)
-                {
-                    tbStatus.Text = "Command Sent";
-                    
-                }
-
-            }
             
+            try
+            {
+                UInt32 bytesWritten;
+                if (serialPort != null)
+                {
+                   
+                    // Create the DataWriter object and attach to OutputStream
+                    dataWriteObject = new DataWriter(serialPort.OutputStream);
+                    if (dataWriteObject != null)
+                    {/*
+                        for (int i = 0; i < numofbytes; i++)
+                        {
+                            // Load the text from the sendText input text box to the dataWriter object
+                            dataWriteObject.WriteByte(data[i]);
+                            // Launch an async task to complete the write operation
+                            storeAsyncTask = dataWriteObject.StoreAsync().AsTask();
+
+                            bytesWritten = await storeAsyncTask;
+                        }*/
+                        try
+                        {
+                            dataWriteObject.WriteBytes(data);
+                            // Launch an async task to complete the write operation
+                            storeAsyncTask = dataWriteObject.StoreAsync().AsTask();
+
+                            bytesWritten = await storeAsyncTask;
+                            if (bytesWritten > 0)
+                            {
+                                
+
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            tbStatus.Text = "Error Sending Command : "+e;
+                        }
+                        
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                tbStatus.Text = "Write Bytes Error: " + ex.Message;
+            }
+            finally
+            {
+                // Cleanup once complete
+                if (dataWriteObject != null)
+                {
+                    dataWriteObject.DetachStream();
+                    dataWriteObject = null;
+                }
+            }
+
 
         }
 
@@ -237,8 +246,18 @@ namespace UWPBiped
             servoRightAnkle.IsEnabled = enable;
             servoRightLeg.IsEnabled = enable;
             servoRightHip.IsEnabled = enable;
-            servoSpeed.IsEnabled = enable;
-            servoAcceleration.IsEnabled = enable;
+            speedLeftAnkle.IsEnabled = enable;
+            speedLeftLeg.IsEnabled = enable;
+            speedLeftHip.IsEnabled = enable;
+            speedRightAnkle.IsEnabled = enable;
+            speedRightLeg.IsEnabled = enable;
+            speedRightHip.IsEnabled = enable;
+            accelerationLeftAnkle.IsEnabled = enable;
+            accelerationLeftLeg.IsEnabled = enable;
+            accelerationLeftHip.IsEnabled = enable;
+            accelerationRightAnkle.IsEnabled = enable;
+            accelerationRightLeg.IsEnabled = enable;
+            accelerationRightHip.IsEnabled = enable;
         }
 
        
@@ -248,6 +267,7 @@ namespace UWPBiped
             {
                 if (serialPort != null)
                 {
+                    voice.say("Motor Control System Activate");
                     dataReaderObject = new DataReader(serialPort.InputStream);
 
                     // keep reading the serial input
@@ -324,7 +344,7 @@ namespace UWPBiped
             loadAsyncTask = dataReaderObject.LoadAsync(ReadBufferLength).AsTask(cancellationToken);
 
             // Launch the task and wait
-            UInt32 bytesRead = await loadAsyncTask;
+            bytesRead = await loadAsyncTask;
             if (bytesRead > 0)
             {
               //  rcvdText.Text = dataReaderObject.ReadString(bytesRead);
@@ -356,6 +376,7 @@ namespace UWPBiped
                     cancelReadTask();
                     closeComPort();
                     ListAvailablePorts();
+                    
                 }
                 catch (Exception ex)
                 {
@@ -420,22 +441,208 @@ namespace UWPBiped
 
         public bool setTarget(byte channelNumber, UInt16 target)
         {
-            byte[] command = new byte[4];
-            byte[] targetBytes = BitConverter.GetBytes(target);
-            Array.Reverse(targetBytes);
-                  
+            byte[] command = new byte[6];
+            byte[] targetBytes = BitConverter.GetBytes((target));
+            //Array.Reverse(targetBytes);
+               
+               
 
-            command[0] = 0x84;
-            command[1] = channelNumber;
-            command[2] = targetBytes[0];
-            command[3] = targetBytes[1];
-            writeBytes(command);
+            command[0] = 0xAA;
+            command[1] = deviceNumber;
+            command[2] = 0x04;
+            command[3] = channelNumber;
+            command[4] = (byte)(targetBytes[0] / 0x02);   // div 2 as c# doesnt do Masking so can't mask with 7F
+            command[5] = (byte)(targetBytes[1] / 0x02);
+            writeBytes(command, 6);
+
+            return true;
+
+        }
+
+        public bool setSpeed(byte channelNumber, UInt16 speed)
+        {
+            byte[] command = new byte[6];
+            byte[] targetBytes = BitConverter.GetBytes(speed);
+            //Array.Reverse(targetBytes);
+
+
+            command[0] = 0xAA;
+            command[1] = deviceNumber;
+            command[2] = 0x07;
+            command[3] = channelNumber;
+            command[4] = (byte)(targetBytes[0] / 0x02);   // should be 7 bit data 
+            command[5] = (byte)(targetBytes[1] / 0x02);
+            writeBytes(command, 6);
+
+            return true;
+        }
+
+        public bool setAcceleration(byte channelNumber, UInt16 acceleration)
+        {
+            byte[] command = new byte[6];
+            byte[] targetBytes = BitConverter.GetBytes(acceleration);
+            //Array.Reverse(targetBytes);
+
+            
+            command[0] = 0xAA;
+            command[1] = deviceNumber;
+            command[2] = 0x09;
+            command[3] = channelNumber;
+            command[4] = (byte)(targetBytes[0] / 0x02);   // should be 7 bit data 
+            command[5] = (byte)(targetBytes[1] / 0x02);
+            writeBytes(command,6);
+
+            return true;
+
+        }
+
+        public bool goHome()
+        {
+            byte[] command = new byte[3];
+            
+            command[0] = 0xAA;
+            command[1] = deviceNumber;
+            command[2] = 0x22;
+            writeBytes(command,6);
 
             return true;
 
         }
 
 
+        public async void getPosition(byte channel)
+        {
+            byte[] command = new byte[4];
 
+            command[0] = 0xAA;
+            command[1] = deviceNumber;
+            command[2] = 0x10;
+            command[3] = channel;
+            writeBytes(command,4);
+
+            await ReadAsync(ReadCancellationTokenSource.Token);
+            
+            if (bytesRead >= 2)
+            {
+                tbStatus.Text = "Channel " + channel.ToString() + " set to "+dataReaderObject.ReadInt16().ToString();
+            }
+
+        }
+
+        public async void getErrors()
+        {
+            byte[] command = new byte[3];
+
+            command[0] = 0xAA;
+            command[1] = deviceNumber;
+            command[2] = 0x21;
+
+            writeBytes(command,3);
+
+            await ReadAsync(ReadCancellationTokenSource.Token);
+
+            if (bytesRead >= 2)
+            {
+                tbStatus.Text = "Error State: " + dataReaderObject.ToString();
+            }
+
+        }
+
+        private void btnGetChannel_Click(object sender, RoutedEventArgs e)
+        {
+            voice.say("Nukes activated");
+            goHome();
+        }
+
+        private void servoLeftHip_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setTarget(0, (UInt16)servoLeftHip.Value);
+        }
+
+        private void accelerationLeftLeg_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setAcceleration(1, (UInt16)accelerationLeftLeg.Value);
+        }
+
+        private void speedLeftHip_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setSpeed(0, (UInt16)speedLeftHip.Value);
+        }
+
+
+        private void servoLeftLeg_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setTarget(1, (UInt16)servoLeftLeg.Value);
+        }
+
+        private void speedLeftLeg_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setSpeed(1, (UInt16)speedLeftLeg.Value);
+        }
+
+        private void accelerationLeftHip_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setAcceleration(0, (UInt16)accelerationLeftHip.Value);
+        }
+
+        private void speedLeftAnkle_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setSpeed(2, (UInt16)speedLeftAnkle.Value);
+        }
+
+        private void accelerationLeftAnkle_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setAcceleration(2, (UInt16)accelerationLeftAnkle.Value);
+        }
+
+        private void servoLeftAnkle_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setTarget(2, (UInt16)servoLeftAnkle.Value);
+        }
+
+        private void speedRightHip_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setSpeed(3, (UInt16)speedRightHip.Value);
+        }
+
+        private void accelerationRightHip_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setAcceleration(3, (UInt16)accelerationRightHip.Value);
+        }
+
+        private void servoRightHip_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setTarget(3, (UInt16)servoRightHip.Value);
+        }
+
+        private void speedRightLeg_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setSpeed(4, (UInt16)speedRightLeg.Value);
+        }
+
+        private void accelerationRightLeg_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setAcceleration(4, (UInt16)accelerationRightLeg.Value);
+        }
+
+        private void servoRightLeg_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setTarget(4, (UInt16)servoRightLeg.Value);
+        }
+
+        private void speedRightAnkle_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setSpeed(5, (UInt16)speedRightAnkle.Value);
+        }
+
+        private void accelerationRightAnkle_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setAcceleration(5, (UInt16)accelerationRightAnkle.Value);
+        }
+
+        private void servoRightAnkle_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            setTarget(5, (UInt16)servoRightAnkle.Value);
+        }
     }
 }

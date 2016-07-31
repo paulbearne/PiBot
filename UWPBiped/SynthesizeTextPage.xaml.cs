@@ -18,6 +18,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
+
 namespace UWPBiped
 {
     public sealed partial class SynthesizeTextPage : Page
@@ -25,7 +26,7 @@ namespace UWPBiped
         private SpeechSynthesizer synthesizer;
         private ResourceContext speechContext;
         private ResourceMap speechResourceMap;
-
+       
         public SynthesizeTextPage()
         {
             InitializeComponent();
@@ -134,6 +135,7 @@ namespace UWPBiped
                 }
             }
         }
+
 
         /// <summary>
         /// This is called when the user has selects a voice from the drop down.
