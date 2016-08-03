@@ -29,6 +29,8 @@ namespace UWPBiped
             synthesizer = new SpeechSynthesizer();
         }
 
+        
+
         private void Media_MediaEnded(object sender, RoutedEventArgs e)
         {
             if (OnComplete != null)

@@ -20,7 +20,7 @@ namespace UWPBiped.ViewModel
             SimpleIoc.Default.Register<INavigationService2>(() =>
             {
                 var nav = new UWPBiped.Service.NavigationService();
-                nav.Configure("Home", typeof(HomePage));
+                nav.Configure("Manual", typeof(ManualControl));
                 nav.Configure("Audio", typeof(SynthesizeTextPage));
                 nav.Configure("Camera", typeof(CameraPage));
                 nav.Configure("Settings", typeof(SettingsPage));
@@ -29,15 +29,11 @@ namespace UWPBiped.ViewModel
                 return nav;
             });
             SimpleIoc.Default.Register<IDialogService, DialogService>();
-
-            // setup models
-            SimpleIoc.Default.Register<IAbout, About>();
             SimpleIoc.Default.Register<ISettings>(() => new Settings(ApplicationData.Current.LocalSettings));
 
 
             // setup view models
             SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<AboutViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
         }
 
@@ -46,11 +42,7 @@ namespace UWPBiped.ViewModel
             Justification = "This non-static member is needed for data binding purposes.")]
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
-            "CA1822:MarkMembersAsStatic",
-            Justification = "This non-static member is needed for data binding purposes.")]
-        public AboutViewModel About => ServiceLocator.Current.GetInstance<AboutViewModel>();
-
+       
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]

@@ -42,6 +42,7 @@ namespace UWPBiped
             this.InitializeComponent();
             this.RequestedTheme = LoadApplicationTheme();
             this.Suspending += OnSuspending;
+            
         }
 
         private ApplicationTheme LoadApplicationTheme()
@@ -75,6 +76,19 @@ namespace UWPBiped
 #endif
 
             Frame rootFrame = Window.Current.Content as Frame;
+            Variables.config = new ConfigData();
+            // load our config data
+            if (Variables.config.configExists())
+            {
+              // no need to do anything as will already have been loaded
+
+            }
+            else
+            {
+               
+                Variables.config.initValues();
+
+            }
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -133,6 +147,7 @@ namespace UWPBiped
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
+            
             deferral.Complete();
         }
     }

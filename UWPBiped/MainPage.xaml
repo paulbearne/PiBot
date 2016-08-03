@@ -8,7 +8,46 @@
       DataContext="{Binding Main,
                             Source={StaticResource Locator}}"
       mc:Ignorable="d">
+    <controls:NavControl Width="1024"
+                         Height="713"
+                         Margin="0,0,0,0"
+                         HorizontalAlignment="Left" />
+    <Page.BottomAppBar>
+        <CommandBar Height="55" RenderTransformOrigin="0.5,0.5">
+            <CommandBar.RenderTransform>
+                <CompositeTransform ScaleY="-1" />
+            </CommandBar.RenderTransform>
+            <CommandBar.Content>
+                <Grid>
+                    <MediaElement x:Name="audio"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Top" />
+                    <AppBarButton x:Name="appBarButton"
+                                  Margin="875,28,-807,0"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Top"
+                                  Icon="Accept"
+                                  Label="appbarbutton" />
+                </Grid>
+            </CommandBar.Content>
+            <AppBarButton Icon="Volume" Label="appbarbutton">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <Slider Name="slVolume"
+                                Height="150"
+                                Orientation="Vertical"
+                                ValueChanged="Slider_ValueChanged"
+                                Value="60" />
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton Name="btnExit"
+                          Width="68"
+                          Click="btnExit_Click"
+                          Icon="Cancel" />
+        </CommandBar>
+    </Page.BottomAppBar>
 
-    <controls:NavControl x:Name="navControl" />
+
 
 </Page>

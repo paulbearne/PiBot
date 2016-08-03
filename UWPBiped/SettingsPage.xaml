@@ -26,41 +26,7 @@
 
             </StackPanel>
         </PivotItem>
-        <PivotItem DataContext="{Binding About, Source={StaticResource Locator}}" Header="Privacy statement">
-            <i:Interaction.Behaviors>
-                <local:HideablePivotItemBehavior Visible="{Binding Model.PrivacyStatement, Converter={StaticResource IsNotNullConverter}}" />
-            </i:Interaction.Behaviors>
-            <WebView Source="{Binding Model.PrivacyStatement}" />
-        </PivotItem>
-        <PivotItem DataContext="{Binding About, Source={StaticResource Locator}}" Header="Terms of use">
-            <i:Interaction.Behaviors>
-                <local:HideablePivotItemBehavior Visible="{Binding Model.TermsOfUse, Converter={StaticResource IsNotNullConverter}}" />
-            </i:Interaction.Behaviors>
-            <WebView Source="{Binding Model.TermsOfUse}" />
-        </PivotItem>
-        <PivotItem DataContext="{Binding About, Source={StaticResource Locator}}" Header="Credits">
-            <i:Interaction.Behaviors>
-                <local:HideablePivotItemBehavior Visible="{Binding Model.Credits, Converter={StaticResource IsNotNullConverter}}" />
-            </i:Interaction.Behaviors>
-            <ItemsControl ItemsSource="{Binding Model.Credits}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Margin="0,12,0,0" Orientation="Vertical">
-                            <TextBlock Text="{Binding Subject}" />
-                            <TextBlock Text="{Binding Text}" Visibility="{Binding Text, Converter={StaticResource NullToVisibilityConverter}}" />
-                            <Image HorizontalAlignment="Left"
-                                   Source="{Binding ImageUri}"
-                                   Stretch="None"
-                                   Visibility="{Binding ImageUri,
-                                                        Converter={StaticResource NullToVisibilityConverter}}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </PivotItem>
-        <PivotItem Header="About">
-            <controls:AboutControl DataContext="{Binding About, Source={StaticResource Locator}}" />
-        </PivotItem>
+
     </Pivot>
 
 </Page>

@@ -1,0 +1,496 @@
+﻿<Page x:Class="PiBotCpp.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:PiBotCpp"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d">
+
+    <Page.Resources>
+        <CollectionViewSource x:Name="DeviceListSource" />
+    </Page.Resources>
+
+    <RelativePanel x:Name="pnMain"
+                   Width="1024"
+                   Height="768"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top">
+        <RelativePanel x:Name="pnCommunications"
+                       Width="1025"
+                       Height="70"
+                       Margin="0,0,-1025,-70"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Background="#FFFBFBF8">
+            <ToggleSwitch x:Name="btnCommsConnect"
+                          Width="154"
+                          Height="60"
+                          Margin="30,5,-30,-5"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Top"
+                          Header="Maestro"
+                          OffContent="Disconnect"
+                          OnContent="Connect" />
+            <ComboBox x:Name="cbCommsDevices"
+                      Width="789"
+                      Height="32"
+                      Margin="211,20,-936,-20"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
+                      ItemsSource="{Binding Source={StaticResource DeviceListSource}}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Name="tbDevicesId" Text="{Binding Id}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </RelativePanel>
+
+        <RelativePanel x:Name="servoPanel"
+                       Margin="0,71,-1024,70"
+                       Background="White">
+            <StackPanel Width="153"
+                        Height="506"
+                        Margin="77,35,-37,-35"
+                        VerticalAlignment="Top"
+                        Orientation="Vertical">
+                <Button x:Name="btnGetChannel"
+                        HorizontalAlignment="Stretch"
+                        Click="btnGetChannel_Click"
+                        Content="Home All" />
+
+                <TextBlock x:Name="tbLHS"
+                           Margin="0,75,0,0"
+                           HorizontalAlignment="Right"
+                           Text="Left Hip Speed"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="tbLHA"
+                           Margin="0,20,0,0"
+                           HorizontalAlignment="Right"
+                           Text="Left Hip Acceleration"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="tbLHSR"
+                           Margin="0,20,0,0"
+                           HorizontalAlignment="Right"
+                           Text="Left Hip Servo"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="tbLLS"
+                           Margin="0,20,0,0"
+                           HorizontalAlignment="Right"
+                           Text="Left Leg Speed"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="tbLLA"
+                           Margin="0,20,0,0"
+                           HorizontalAlignment="Right"
+                           Text="Left Leg Acceleration"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="tbLLSR"
+                           Margin="0,20,0,0"
+                           HorizontalAlignment="Right"
+                           Text="Left Leg Servo"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="tbLAS"
+                           Margin="0,20,0,0"
+                           HorizontalAlignment="Right"
+                           Text="Left Ankle Speed"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="tbLAA"
+                           Margin="0,20,0,0"
+                           HorizontalAlignment="Right"
+                           Text="Left Ankle Acceleration"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="tbLASR"
+                           Margin="0,20,0,0"
+                           HorizontalAlignment="Right"
+                           Text="Left Ankle Servo"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+            <StackPanel Margin="245,40,-421,0"
+                        BorderThickness="0"
+                        Orientation="Vertical">
+                <StackPanel.Background>
+                    <ImageBrush ImageSource="brat03.jpg" Stretch="Fill" />
+                </StackPanel.Background>
+                <StackPanel Height="100"
+                            BorderThickness="0,5,0,0"
+                            Orientation="Horizontal">
+                    <StackPanel Width="210"
+                                Height="100"
+                                VerticalAlignment="Bottom"
+                                Orientation="Vertical"
+                                Padding="0,0,50,0">
+                        <TextBlock x:Name="tbDistanceLabel"
+                                   HorizontalAlignment="Right"
+                                   Foreground="#FF088AF7"
+                                   Text="Obstacle Distance"
+                                   TextWrapping="Wrap" />
+                        <StackPanel Height="20px"
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal">
+                            <TextBlock x:Name="tbHeadDistance"
+                                       HorizontalAlignment="Right"
+                                       Foreground="#FF045AF0"
+                                       Text="0.0" />
+                            <TextBlock HorizontalAlignment="Right"
+                                       Foreground="#FF2568DC"
+                                       Text="cm" />
+                        </StackPanel>
+                        <TextBlock x:Name="Heading"
+                                   HorizontalAlignment="Right"
+                                   Foreground="#FF2568DC"
+                                   Text="Heading" />
+                        <StackPanel Height="20px"
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal">
+                            <TextBlock x:Name="tbHeading"
+                                       HorizontalAlignment="Right"
+                                       Foreground="#FF045AF0"
+                                       Text="0.0" />
+                            <TextBlock HorizontalAlignment="Right"
+                                       Foreground="#FF2568DC"
+                                       Text="°" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <Canvas x:Name="HeadCanvas"
+                                Width="100"
+                                Height="100"
+                                Margin="0,0,0,0"
+                                Background="Gray"
+                                Visibility="Visible">
+                            <CaptureElement x:Name="headElement"
+                                            Width="100"
+                                            Height="100"
+                                            HorizontalAlignment="Left"
+                                            Visibility="Visible" />
+                        </Canvas>
+                    </StackPanel>
+                    <StackPanel Width="220"
+                                Height="100"
+                                VerticalAlignment="Bottom"
+                                Orientation="Vertical"
+                                Padding="50,0,0,0">
+                        <TextBlock x:Name="tbVoltageLabel"
+                                   Margin="0"
+                                   Foreground="#FF088AF7"
+                                   Text="Battery"
+                                   TextWrapping="Wrap" />
+                        <StackPanel Height="20px"
+                                    HorizontalAlignment="Left"
+                                    Orientation="Horizontal">
+                            <TextBlock x:Name="tbBatteryVoltage"
+                                       HorizontalAlignment="Left"
+                                       Foreground="#FF045AF0"
+                                       Text="0.0" />
+                            <TextBlock HorizontalAlignment="Left"
+                                       Foreground="#FF2568DC"
+                                       Text="V" />
+                        </StackPanel>
+                        <TextBlock x:Name="Heading2"
+                                   HorizontalAlignment="Left"
+                                   Foreground="#FF2568DC"
+                                   Text="Pitch" />
+                        <StackPanel Height="20px"
+                                    HorizontalAlignment="Left"
+                                    Orientation="Horizontal">
+                            <TextBlock x:Name="tbHeading2"
+                                       HorizontalAlignment="Left"
+                                       Foreground="#FF045AF0"
+                                       Text="0.0" />
+                            <TextBlock HorizontalAlignment="Left"
+                                       Foreground="#FF2568DC"
+                                       Text="°" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Height="441" Orientation="Horizontal">
+
+                    <StackPanel Width="203"
+                                Height="440"
+                                Margin="10,0,100,-37"
+                                VerticalAlignment="Top"
+                                Orientation="Vertical">
+                        <Slider x:Name="speedLeftHip"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                IntermediateValue="50"
+                                Maximum="254"
+                                Padding="0,0,0,0"
+                                ValueChanged="speedLeftHip_ValueChanged"
+                                Value="50" />
+                        <Slider x:Name="accelerationLeftHip"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                Maximum="254"
+                                Padding="0,0,0,0"
+                                ValueChanged="accelerationLeftHip_ValueChanged"
+                                Value="100" />
+                        <Slider x:Name="servoLeftHip"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                Maximum="2500"
+                                Minimum="500"
+                                Padding="0,0,0,0"
+                                ValueChanged="servoLeftHip_ValueChanged"
+                                Value="1500" />
+                        <Slider x:Name="speedLeftLeg"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                Maximum="254"
+                                Padding="0,0,0,0"
+                                ValueChanged="speedLeftLeg_ValueChanged"
+                                Value="50" />
+                        <Slider x:Name="accelerationLeftLeg"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                Maximum="254"
+                                Padding="0,0,0,0"
+                                ValueChanged="accelerationLeftLeg_ValueChanged"
+                                Value="100" />
+                        <Slider x:Name="servoLeftLeg"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                Maximum="2500"
+                                Minimum="500"
+                                Padding="0,0,0,0"
+                                ValueChanged="servoLeftLeg_ValueChanged"
+                                Value="1500" />
+                        <Slider x:Name="speedLeftAnkle"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                Maximum="254"
+                                Padding="0,0,0,0"
+                                ValueChanged="speedLeftAnkle_ValueChanged"
+                                Value="50" />
+                        <Slider x:Name="accelerationLeftAnkle"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                Maximum="254"
+                                Padding="0,0,0,0"
+                                ValueChanged="accelerationLeftAnkle_ValueChanged"
+                                Value="100" />
+                        <Slider x:Name="servoLeftAnkle"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                Maximum="2500"
+                                Minimum="500"
+                                Padding="0,0,0,0"
+                                ValueChanged="servoLeftAnkle_ValueChanged"
+                                Value="1500" />
+                        <TextBlock x:Name="distfoot2"
+                                   Height="20px"
+                                   Margin="0,30,0,0"
+                                   HorizontalAlignment="Right"
+                                   Foreground="#FF045AF0"
+                                   Text="Obstacle Distance" />
+                        <StackPanel Height="20px"
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal">
+                            <TextBlock x:Name="tbLeftFootDistance"
+                                       HorizontalAlignment="Right"
+                                       Foreground="#FF045AF0"
+                                       Text="0.0" />
+                            <TextBlock HorizontalAlignment="Right"
+                                       Foreground="#FF2568DC"
+                                       Text="cm" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Width="225"
+                                Height="440"
+                                Margin="10,0,0,0"
+                                VerticalAlignment="Top"
+                                BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}"
+                                Orientation="Vertical">
+                        <Slider x:Name="speedRightHip"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                IsDirectionReversed="True"
+                                Maximum="254"
+                                Padding="0,0,0,0"
+                                ValueChanged="speedRightHip_ValueChanged"
+                                Value="50" />
+                        <Slider x:Name="accelerationRightHip"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                IsDirectionReversed="True"
+                                Maximum="254"
+                                Padding="0,0,0,0"
+                                ValueChanged="accelerationRightHip_ValueChanged"
+                                Value="100" />
+                        <Slider x:Name="servoRightHip"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                IsDirectionReversed="True"
+                                Maximum="2500"
+                                Minimum="500"
+                                Padding="0,0,0,0"
+                                ValueChanged="servoRightHip_ValueChanged"
+                                Value="1500" />
+                        <Slider x:Name="speedRightLeg"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                IsDirectionReversed="True"
+                                Maximum="254"
+                                Padding="0,0,0,0"
+                                ValueChanged="speedRightLeg_ValueChanged"
+                                Value="50" />
+                        <Slider x:Name="accelerationRightLeg"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                IsDirectionReversed="True"
+                                Maximum="254"
+                                Padding="0,0,0,0"
+                                ValueChanged="accelerationRightLeg_ValueChanged"
+                                Value="100" />
+                        <Slider x:Name="servoRightLeg"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                IsDirectionReversed="True"
+                                Maximum="2500"
+                                Minimum="500"
+                                Padding="0,0,0,0"
+                                ValueChanged="servoRightLeg_ValueChanged"
+                                Value="1500" />
+                        <Slider x:Name="speedRightAnkle"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                IsDirectionReversed="True"
+                                Maximum="254"
+                                Padding="0,0,0,0"
+                                ValueChanged="speedRightAnkle_ValueChanged"
+                                Value="50" />
+                        <Slider x:Name="accelerationRightAnkle"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                IsDirectionReversed="True"
+                                Maximum="254"
+                                Padding="0,0,0,0"
+                                ValueChanged="accelerationRightAnkle_ValueChanged"
+                                Value="100" />
+                        <Slider x:Name="servoRightAnkle"
+                                Height="40"
+                                Margin="0"
+                                Background="#663BDCEC"
+                                IsDirectionReversed="True"
+                                Maximum="2500"
+                                Minimum="500"
+                                Padding="0,0,0,0"
+                                ValueChanged="servoRightAnkle_ValueChanged"
+                                Value="1500" />
+                        <TextBlock x:Name="distfoot1"
+                                   Height="20px"
+                                   Margin="0,30,0,0"
+                                   Foreground="#FF045AF0"
+                                   Text="Obstacle Distance" />
+                        <StackPanel Height="20px" Orientation="Horizontal">
+                            <TextBlock x:Name="tbRightFootDistance"
+                                       Foreground="#FF045AF0"
+                                       Text="0.0" />
+                            <TextBlock Foreground="#FF2568DC" Text="cm" />
+                        </StackPanel>
+
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Width="182"
+                        Height="515"
+                        Margin="803,35,-803,-37"
+                        VerticalAlignment="Top"
+                        Orientation="Vertical"
+                        Padding="10,0,0,0">
+                <TextBlock x:Name="textBlock4"
+                           Margin="0,110,0,0"
+                           Text="Right Hip Speed"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="textBlock5"
+                           Margin="0,20,0,0"
+                           Text="Right Hip Acceleration"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="textBlock6"
+                           Margin="0,20,0,0"
+                           Text="Right Hip Servo"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="textBlock7"
+                           Margin="0,20,0,0"
+                           Text="Right Leg Speed"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="textBlock8"
+                           Margin="0,20,0,0"
+                           Text="Right Leg Acceleration"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="textBlock11"
+                           Margin="0,20,0,0"
+                           Text="Right Leg Servo"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="textBlock12"
+                           Margin="0,20,0,0"
+                           Text="Right Ankle Speed"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="textBlock13"
+                           Margin="0,20,0,0"
+                           Text="Right Ankle Acceleration"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="textBlock14"
+                           Margin="0,20,0,0"
+                           Text="Right Ankle Servo"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+
+
+        </RelativePanel>
+
+        <RelativePanel Name="rpLabelsPanel"
+                       Margin="1,655,-1025,-10"
+                       Background="White">
+            <TextBlock x:Name="textBlock1"
+                       Margin="268,0,-148,0"
+                       Text="Left Leg Servos"
+                       TextWrapping="Wrap" />
+            <TextBlock x:Name="textBlock2"
+                       Margin="629,0,-429,0"
+                       Text="Right Leg Servos"
+                       TextWrapping="Wrap" />
+            <MediaElement x:Name="AudioElement"
+                          Height="25"
+                          Margin="462,0,461,0" />
+
+        </RelativePanel>
+        <RelativePanel x:Name="pnStatus"
+                       Height="80"
+                       Margin="0,690,-1024,0"
+                       VerticalAlignment="Top">
+            <ScrollViewer x:Name="scrStatus"
+                          Width="1024"
+                          Margin="0,0,0,0"
+                          Background="Black">
+                <TextBlock x:Name="tbStatus"
+                           Width="1024"
+                           Height="80"
+                           Margin="0"
+                           FontSize="10"
+                           Foreground="#FF0BFB16"
+                           Text="Status"
+                           TextWrapping="Wrap" />
+            </ScrollViewer>
+        </RelativePanel>
+
+
+    </RelativePanel>
+</Page>

@@ -1,17 +1,19 @@
-﻿<Page x:Class="UWPBiped.HomePage"
+﻿<Page x:Class="UWPBiped.ManualControl"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:UWPBiped"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      Height="725"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       mc:Ignorable="d">
 
     <Page.Resources>
         <CollectionViewSource x:Name="DeviceListSource" />
     </Page.Resources>
 
-    <StackPanel Margin="50,0" Background="{ThemeResource AppBarBackgroundThemeBrush}">
-        <StackPanel Orientation="Horizontal">
+    <StackPanel Margin="0" Background="{ThemeResource AppBarBackgroundThemeBrush}">
+        <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Orientation="Horizontal">
             <ToggleSwitch x:Name="btnMaestro"
                           Margin="0,0,0,0"
                           HorizontalAlignment="Center"
@@ -35,7 +37,7 @@
         </StackPanel>
         <ScrollViewer x:Name="statusScroller"
                       Height="67"
-                      Background="Black">
+                      Background="black">
             <TextBlock x:Name="tbStatus"
                        Margin="0"
                        FontSize="10"
@@ -44,13 +46,16 @@
                        TextWrapping="Wrap" />
         </ScrollViewer>
         <StackPanel x:Name="servoPanel"
-                    Height="559"
+                    Height="563"
                     Margin="0,20,0,0"
-                    Orientation="Horizontal">
+                    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                    Orientation="Horizontal"
+                    Padding="20,0,0,0">
             <StackPanel Width="153"
                         Height="506"
-                        Margin="20,0,20,0"
+                        Margin="40,0,20,0"
                         VerticalAlignment="Top"
+                        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                         Orientation="Vertical">
                 <Button x:Name="btnGetChannel"
                         HorizontalAlignment="Stretch"
@@ -103,7 +108,7 @@
                            Text="Left Ankle Servo"
                            TextWrapping="Wrap" />
             </StackPanel>
-            <StackPanel Width="529"
+            <StackPanel Width="557"
                         BorderThickness="0"
                         Orientation="Vertical">
                 <StackPanel.Background>
@@ -149,7 +154,7 @@
                                        Text="°" />
                         </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical">
+                    <StackPanel BorderThickness="10,0,0,0" Orientation="Vertical">
                         <Canvas x:Name="HeadCanvas"
                                 Width="100"
                                 Height="100"
@@ -306,7 +311,6 @@
                                 Height="440"
                                 Margin="10,0,0,0"
                                 VerticalAlignment="Top"
-                                BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}"
                                 Orientation="Vertical">
                         <Slider x:Name="speedRightHip"
                                 Height="40"
@@ -411,10 +415,21 @@
                         Height="515"
                         Margin="0,0,0,-2"
                         VerticalAlignment="Top"
+                        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                         Orientation="Vertical"
                         Padding="10,0,0,0">
+                <ToggleButton x:Name="btnCal"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch"
+                              Checked="btnCal_Checked"
+                              Content="Calibrate" />
+                <Button x:Name="btnSaveCalData"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Content="Save"
+                        IsEnabled="False" />
                 <TextBlock x:Name="textBlock4"
-                           Margin="0,110,0,0"
+                           Margin="0,45,0,0"
                            Text="Right Hip Speed"
                            TextWrapping="Wrap" />
                 <TextBlock x:Name="textBlock5"
@@ -453,51 +468,6 @@
 
 
         </StackPanel>
-        <StackPanel Name="servoLabelsPanel"
-                    Height="31"
-                    Orientation="Horizontal">
-            <TextBlock x:Name="textBlock"
-                       Margin="90,0,0,0"
-                       Text="Speed"
-                       TextWrapping="Wrap" />
-            <TextBlock x:Name="textBlock1"
-                       Margin="120,0,0,0"
-                       Text="Left Leg Servos"
-                       TextWrapping="Wrap" />
-            <TextBlock x:Name="textBlock2"
-                       Margin="200,0,0,0"
-                       Text="Right Leg Servos"
-                       TextWrapping="Wrap" />
-            <TextBlock x:Name="textBlock3"
-                       Margin="110,0,0,0"
-                       Text="Acceleration"
-                       TextWrapping="Wrap" />
-            <TextBlock x:Name="textBlock9"
-                       Margin="90,0,0,0"
-                       Text="Speed"
-                       TextWrapping="Wrap" />
-            <TextBlock x:Name="textBlock10"
-                       Margin="120,0,0,0"
-                       Text="Left Leg Servos"
-                       TextWrapping="Wrap" />
-            <TextBlock x:Name="textBlock16"
-                       Margin="200,0,0,0"
-                       Text="Right Leg Servos"
-                       TextWrapping="Wrap" />
-            <TextBlock x:Name="textBlock17"
-                       Margin="110,0,0,0"
-                       Text="Acceleration"
-                       TextWrapping="Wrap" />
-
-            <TextBlock x:Name="textBlock18"
-                       Margin="110,0,0,0"
-                       Text="Acceleration"
-                       TextWrapping="Wrap" />
-        </StackPanel>
-        <MediaElement x:Name="AudioElement"
-                      Height="25"
-                      Margin="462,0,461,0" />
-
 
         <!--  TODO - This is the main starting UI for your app  -->
     </StackPanel>

@@ -19,9 +19,9 @@ namespace UWPBiped.ViewModel
             {
                 new NavItem()
                 {
-                    Text = "Home",
+                    Text = "Manual Control",
                     ButtonText = "\uE80F",
-                    Command = new RelayCommand(() => NavigateTo("Home"), () => ActivePage != "Home" )
+                    Command = new RelayCommand(() => NavigateTo("Manual"), () => ActivePage != "Manual" )
                 },
                 new NavItem()
                 {
@@ -48,18 +48,6 @@ namespace UWPBiped.ViewModel
             {
                 new NavItem()
                 {
-                    Text = "Visit website",
-                    ButtonText = "\uE909",
-                    Command = new RelayCommand(() =>
-                    {
-                        var uri = new Uri("http://google.com/", UriKind.Absolute);
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                        Launcher.LaunchUriAsync(uri);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                    })
-                },
-                new NavItem()
-                {
                     Text = "Settings",
                     ButtonText = "\uE713",
                     Command = new RelayCommand(() => NavigateTo("Settings"), () => ActivePage != "Settings" )
@@ -71,7 +59,7 @@ namespace UWPBiped.ViewModel
             // do this asynchronously on the dispatcher so that the UI is full instantiated
             // before we attempt to navigate (see comment in NavControl.xaml.cs)
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            DispatcherHelper.RunAsync(() => base.NavigateTo("Home"));
+            DispatcherHelper.RunAsync(() => base.NavigateTo("Manual"));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 

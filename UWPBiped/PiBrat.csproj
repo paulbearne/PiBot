@@ -186,13 +186,11 @@
     <Compile Include="CameraPage.xaml.cs">
       <DependentUpon>CameraPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ConfigFile.cs" />
     <Compile Include="Speech.cs" />
     <Compile Include="StartupTasks.cs" />
     <Compile Include="SpeechCmdPage.xaml.cs">
       <DependentUpon>SpeechCmdPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\AboutControl.xaml.cs">
-      <DependentUpon>AboutControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ItemClickCommand.cs" />
     <Compile Include="Controls\NavControl.xaml.cs">
@@ -200,15 +198,12 @@
     </Compile>
     <Compile Include="Converters.cs" />
     <Compile Include="HideablePivotItem.cs" />
-    <Compile Include="HomePage.xaml.cs">
-      <DependentUpon>HomePage.xaml</DependentUpon>
+    <Compile Include="ManualControl.xaml.cs">
+      <DependentUpon>ManualControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\About.cs" />
-    <Compile Include="Model\Credit.cs" />
-    <Compile Include="Model\IAbout.cs" />
     <Compile Include="Model\ISettings.cs" />
     <Compile Include="Model\Link.cs" />
     <Compile Include="Model\Settings.cs" />
@@ -222,7 +217,7 @@
     <Compile Include="SynthesizeTextPage.xaml.cs">
       <DependentUpon>SynthesizeTextPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\AboutViewModel.cs" />
+    <Compile Include="Variables.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
@@ -258,15 +253,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\AboutControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\NavControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="HomePage.xaml">
+    <Page Include="ManualControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -288,7 +279,9 @@
       <Name>Windows IoT Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Themes\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

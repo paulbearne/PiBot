@@ -33,7 +33,6 @@
                     <StackPanel extensions:ListViewItemExtensions.IsEnabled="{Binding IsEnabled}"
                                 extensions:ListViewItemExtensions.IsSelected="{Binding IsSelected}"
                                 Orientation="Horizontal">
-
                         <TextBlock Width="48"
                                    VerticalAlignment="Stretch"
                                    FontFamily="Segoe MDL2 Assets"
@@ -71,7 +70,7 @@
                         <ListView x:Name="MainItems"
                                   ItemClick="ListView_ItemClick"
                                   ItemTemplate="{StaticResource ButtonItemTemplate}"
-                                  ItemsSource="{Binding Path=MainNavItems}">
+                                  ItemsSource="{Binding MainNavItems}">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -90,7 +89,7 @@
                     <ListView x:Name="SecondaryItems"
                               ItemClick="ListView_ItemClick"
                               ItemTemplate="{StaticResource ButtonItemTemplate}"
-                              ItemsSource="{Binding Path=SecondaryNavItems}">
+                              ItemsSource="{Binding SecondaryNavItems}">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -101,13 +100,12 @@
                     </ListView>
                 </StackPanel>
             </Grid>
+
         </SplitView.Pane>
-        <SplitView.Content>
-            <Frame x:Name="MainFrame"
-                   HorizontalAlignment="Stretch"
-                   VerticalAlignment="Stretch"
-                   VerticalContentAlignment="Stretch"
-                   Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
-        </SplitView.Content>
+        <Frame x:Name="MainFrame"
+               HorizontalAlignment="Stretch"
+               VerticalAlignment="Stretch"
+               VerticalContentAlignment="Stretch"
+               Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
     </SplitView>
 </UserControl>
