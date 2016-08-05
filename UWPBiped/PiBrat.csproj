@@ -95,6 +95,44 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="public\blockly\blockly_compressed.js" />
+    <Content Include="public\blockly\blocks-custom.js" />
+    <Content Include="public\blockly\blocks_compressed.js" />
+    <Content Include="public\blockly\csharp.js" />
+    <Content Include="public\blockly\csharp\colour.js" />
+    <Content Include="public\blockly\csharp\lists.js" />
+    <Content Include="public\blockly\csharp\logic.js" />
+    <Content Include="public\blockly\csharp\loops.js" />
+    <Content Include="public\blockly\csharp\math.js" />
+    <Content Include="public\blockly\csharp\procedures.js" />
+    <Content Include="public\blockly\csharp\text.js" />
+    <Content Include="public\blockly\csharp\variables.js" />
+    <Content Include="public\blockly\javascript-custom.js" />
+    <Content Include="public\blockly\javascript_compressed.js" />
+    <Content Include="public\blockly\media\1x1.gif" />
+    <Content Include="public\blockly\media\click.mp3" />
+    <Content Include="public\blockly\media\click.wav" />
+    <Content Include="public\blockly\media\delete.mp3" />
+    <Content Include="public\blockly\media\delete.wav" />
+    <Content Include="public\blockly\media\disconnect.mp3" />
+    <Content Include="public\blockly\media\disconnect.wav" />
+    <Content Include="public\blockly\media\handclosed.cur" />
+    <Content Include="public\blockly\media\handdelete.cur" />
+    <Content Include="public\blockly\media\handopen.cur" />
+    <Content Include="public\blockly\media\quote0.png" />
+    <Content Include="public\blockly\media\quote1.png" />
+    <Content Include="public\blockly\media\sprites.png" />
+    <Content Include="public\blockly\media\sprites.svg" />
+    <Content Include="public\blockly\msg\js\en.js" />
+    <Content Include="public\css\foundation-flex.css" />
+    <Content Include="public\css\foundation-rtl.css" />
+    <Content Include="public\css\foundation.css" />
+    <Content Include="public\css\foundation.min.css" />
+    <Content Include="public\index.html" />
+    <Content Include="public\js\foundation.js" />
+    <Content Include="public\js\foundation.min.js" />
+    <Content Include="public\js\vendor\jquery.min.js" />
+    <Content Include="public\js\vendor\what-input.min.js" />
     <PRIResource Include="..\..\..\refprojects\gitrepo\msuniversal\samples\speechrecognitionandsynthesis\shared\strings\de-de\LocalizationSpeechResources.resw">
       <Link>Strings\de-DE\LocalizationSpeechResources.resw</Link>
     </PRIResource>
@@ -179,14 +217,23 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adc.cs" />
+    <Compile Include="AdcMcp3008ControllerProvider.cs" />
+    <Compile Include="AdcMcp3008Provider.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AudioPermissions.cs" />
+    <Compile Include="Basic.cs" />
     <Compile Include="CameraPage.xaml.cs">
       <DependentUpon>CameraPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ConfigFile.cs" />
+    <Compile Include="Gpio.cs" />
+    <Compile Include="KalmanFilter.cs" />
+    <Compile Include="mpu9250.cs" />
+    <Compile Include="UltrasonicDistanceSensor.cs" />
+    <Compile Include="WebServer.cs" />
     <Compile Include="Speech.cs" />
     <Compile Include="StartupTasks.cs" />
     <Compile Include="SpeechCmdPage.xaml.cs">
@@ -227,6 +274,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="public\blockly\media\click.ogg" />
+    <None Include="public\blockly\media\delete.ogg" />
+    <None Include="public\blockly\media\disconnect.ogg" />
     <None Include="SunLight_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -281,6 +331,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Themes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\refProjects\GitRepo\Ms-Iot\IoTBlockly\ChakraHost\ChakraHost.csproj">
+      <Project>{9e5cd7f9-7394-4111-bb56-cf6db679cb6a}</Project>
+      <Name>ChakraHost</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\refProjects\GitRepo\Ms-Iot\IoTBlockly\IoTBlocklyHelper\IoTBlocklyHelper.csproj">
+      <Project>{c53f1981-4c52-4873-8e19-ae361507f1f3}</Project>
+      <Name>IoTBlocklyHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -210,35 +211,35 @@ namespace UWPBiped
 
         }
 
-        public bool configExists()
+        public async Task<bool> configExists()
         {
            try
             {
+                StreamReader reader;
                 string appdir = ApplicationData.Current.LocalFolder.Path;
-                using (StreamReader reader = File.OpenText(appdir + "\\config.dat"))
+                reader = File.OpenText(appdir + "\\config.dat");
+                if (reader != null)
                 {
-                    if (reader != null)
-                    {
                         // got a reader so get the data
-                        Volume = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.leftankle.acceleration = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.leftankle.speed = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.leftankle.target = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.leftleg.acceleration = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.leftleg.speed = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.leftleg.target = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.lefthip.acceleration = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.lefthip.speed = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.lefthip.target = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.rightankle.acceleration = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.rightankle.speed = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.rightankle.target = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.rightleg.acceleration = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.rightleg.speed = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.rightleg.target = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.righthip.acceleration = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.righthip.speed = UInt16.Parse(reader.ReadLine());
-                        servoCalValues.righthip.target = UInt16.Parse(reader.ReadLine());
+                         Volume =  UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.leftankle.acceleration = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.leftankle.speed = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.leftankle.target = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.leftleg.acceleration = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.leftleg.speed = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.leftleg.target = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.lefthip.acceleration = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.lefthip.speed = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.lefthip.target = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.rightankle.acceleration = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.rightankle.speed = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.rightankle.target = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.rightleg.acceleration = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.rightleg.speed = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.rightleg.target = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.righthip.acceleration = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.righthip.speed = UInt16.Parse(await reader.ReadLineAsync());
+                        servoCalValues.righthip.target = UInt16.Parse(await reader.ReadLineAsync());
                         reader.Dispose();
                         return true;
                     }
@@ -246,10 +247,11 @@ namespace UWPBiped
                     {
                         return false;
                     }
-                }
+                
             }
             catch (Exception e)
             {
+                Debug.WriteLine(e);
                 return false;
 
             }
@@ -257,7 +259,7 @@ namespace UWPBiped
 
         public void Save()
         {
-            //configFile = await storageFolder.GetFileAsync("config.dat");
+           
             try
             {
                 string appdir = ApplicationData.Current.LocalFolder.Path;
@@ -288,7 +290,7 @@ namespace UWPBiped
                 }
             } catch(Exception e)
             {
-
+                Debug.WriteLine(e);
             }
             
 
@@ -322,7 +324,7 @@ namespace UWPBiped
                 }
             } catch(Exception e)
             {
-                
+                Debug.WriteLine(e);
             }
         }
 

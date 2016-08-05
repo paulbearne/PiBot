@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using System;
 using Windows.ApplicationModel.Background;
-using Windows.ApplicationModel.Resources.Core;
+
 using Windows.Devices.Gpio;
-using Windows.Media.SpeechSynthesis;
 using Windows.System.Threading;
 
 namespace UWPBiped
 {
+   
+
     public sealed class StartupTask : IBackgroundTask
     {
+        
         BackgroundTaskDeferral deferral;
         private GpioPinValue value = GpioPinValue.High;
         private const int LED_PIN = 5;
@@ -25,12 +24,8 @@ namespace UWPBiped
             deferral = taskInstance.GetDeferral();
             InitGPIO();
             timer = ThreadPoolTimer.CreatePeriodicTimer(Timer_Tick, TimeSpan.FromMilliseconds(500));
-
+           
         }
-
-       
-
-        
 
         private void InitGPIO()
         {

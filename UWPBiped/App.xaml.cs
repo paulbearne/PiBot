@@ -21,6 +21,7 @@ using GalaSoft.MvvmLight.Views;
 using GalaSoft.MvvmLight.Ioc;
 
 using UWPBiped.Model;
+using System.Threading.Tasks;
 
 namespace UWPBiped
 {
@@ -66,7 +67,7 @@ namespace UWPBiped
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
 #if DEBUG
             //if (System.Diagnostics.Debugger.IsAttached)
@@ -77,8 +78,9 @@ namespace UWPBiped
 
             Frame rootFrame = Window.Current.Content as Frame;
             Variables.config = new ConfigData();
+            bool result = await Variables.config.configExists();
             // load our config data
-            if (Variables.config.configExists())
+            if (result)
             {
               // no need to do anything as will already have been loaded
 
