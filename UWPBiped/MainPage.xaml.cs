@@ -15,7 +15,7 @@ namespace UWPBiped
     {
         private bool firstRun = true;
         StorageFolder localFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
-        ChakraHost.ChakraHostAsync host = new ChakraHost.ChakraHostAsync();
+        ChakraHostAsync host = new ChakraHostAsync();
         const string mostRecentScriptCacheBlocks = "last-script-blocks.xml";
         const string mostRecentScriptCacheJSCode = "last-script-jscode.js";
         string mostRecentBlocks = "";
@@ -28,6 +28,7 @@ namespace UWPBiped
             startServer();   
             Variables.voice = new Speech(audio);
             Variables.voice.OnComplete += Voice_OnComplete;
+            slVolume.Value = Variables.config.volume;
         }
 
         private async void startServer()
@@ -146,11 +147,11 @@ namespace UWPBiped
         private void Slider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
         {
             audio.Volume = slVolume.Value / 100;
-            if (firstRun == false)
-            {
-                Variables.config.volume = (UInt16)(slVolume.Value);
-            }
-            firstRun = false;
+           // if (firstRun == false)
+            //{
+            Variables.config.volume = (UInt16)(slVolume.Value);
+           // }
+           // firstRun = false;
         }
 
         private void btnExit_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)

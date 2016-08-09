@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -21,38 +22,35 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace UWPBiped
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class ManualControl : Page
+    public sealed partial class ConfigurationPage : Page
     {
-        private SerialDevice serialPort = null;
-        private byte deviceNumber = 0x00;
+        
+        
+        
         private MediaCapture headCapture;
-        DataWriter dataWriteObject = null;
-        DataReader dataReaderObject = null;
-        bool commsConnected = false;
-        ThreadPoolTimer timer;
-        byte[] inBuffer = new byte[256];
-        private ObservableCollection<DeviceInformation> listOfDevices;
-        private CancellationTokenSource ReadCancellationTokenSource;
-        private CancellationTokenSource WriteCancellationTokenSource;
-        private UInt32 bytesRead;
+       // bool commsConnected = false;
+        //private UInt32 bytesRead;
         bool calibrating = false;        
        
-        public ManualControl()
+        public ConfigurationPage()
         {
             
             this.InitializeComponent();
-            Variables.voice.say("Pi Bot Control Online");
             controlState(false);
-            listOfDevices = new ObservableCollection<DeviceInformation>();
-            ListAvailablePorts();
-            timer = ThreadPoolTimer.CreatePeriodicTimer(RefreshTimer_Tick, TimeSpan.FromMilliseconds(2000));
+            // should already have a list of ports 
+            if (Variables.maestroPorts.Count <= 0)
+            {
+                listMaestroPorts();
+            }
+            else
+            {
+                ComportListSource.Source = Variables.maestroPorts;
+            }
             btnCal.Unchecked += BtnCal_Unchecked;
             btnSaveCalData.Click += BtnSaveCalData_Click;
 
@@ -89,17 +87,6 @@ namespace UWPBiped
         {
             Variables.config.Save();
         }
-
-        private void RefreshTimer_Tick(ThreadPoolTimer timer)
-        {
-            if (commsConnected == false)
-            {
-                // refresh the list tacky way to do it but works
-               // listOfDevices.Clear();
-               // ListAvailablePorts();
-            }
-        }
-
         
 
         public void updateStatus(string msg)
@@ -111,7 +98,9 @@ namespace UWPBiped
         {
             initHead(); // restart head
             base.OnNavigatedTo(e);
+            Variables.voice.say("Manual Control System Active");
         }
+
         private async void initHead()
         {
             try
@@ -132,8 +121,6 @@ namespace UWPBiped
                 headCapture = null;
             }
             // Set callbacks for failure and recording limit exceeded
-            //headCapture.Failed += new MediaCaptureFailedEventHandler(headCapture_Failed);
-            //headCapture.RecordLimitationExceeded += new Windows.Media.Capture.RecordLimitationExceededEventHandler(headCapture_RecordLimitExceeded);
             if (headCapture != null)
             {
                 // Start Preview  
@@ -164,11 +151,7 @@ namespace UWPBiped
                 headCapture.Dispose();
                 headCapture = null;
             }
-            if(dataWriteObject != null)
-            {
-                dataWriteObject.Dispose();
-                dataWriteObject = null;
-            }
+           
         }
 
         private async void headCapture_Failed(MediaCapture sender, MediaCaptureFailedEventArgs errorEventArgs)
@@ -188,48 +171,18 @@ namespace UWPBiped
             }
         }
 
-        //todo add calibration and start servos at there calibrated start position
-
-        // change so writebytes justads to the datawrite Object
-        private async void writeBytes(byte[] data,byte numofbytes)
+        private async void listMaestroPorts()
         {
-            if (serialPort != null)
-            {
-                               
-                // put the bytes int the buffer
-                for (int i = 0; i < numofbytes; i++)
-                {
-                    dataWriteObject.WriteByte(data[i]);
-                    await WriteAsync(WriteCancellationTokenSource.Token);
-                }
-                
-
-            }
-        }
-
-        private async void ListAvailablePorts()
-        {
+            if (Variables.maestro == null)
+                Variables.maestro = new PololuMaestro();
             try
             {
-                string aqs = SerialDevice.GetDeviceSelector();
-                var dis = await DeviceInformation.FindAllAsync(aqs);
-
-                tbStatus.Text = "Select a device and connect";
-
-                for (int i = 0; i < dis.Count; i++)
-                {
-                    listOfDevices.Add(dis[i]);
-                }
-
-                DeviceListSource.Source = listOfDevices;
-
-              //  connectedDevices.SelectedIndex = 0;
-                //comPortInput_Click(this, null);
-
+                Variables.maestroPorts = await Variables.maestro.locateDevices();
+                ComportListSource.Source = Variables.maestroPorts;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                tbStatus.Text = ex.Message;
+                Debug.WriteLine(e);
             }
         }
 
@@ -260,189 +213,21 @@ namespace UWPBiped
         }
 
 
-    private async void startTransmit()
-        {
-            try
-            {
-                if (serialPort != null)
-                {
-                    
-                    dataWriteObject = new DataWriter(serialPort.OutputStream);
-
-                    // keep write the serial input
-                    while (true)
-                    {
-                        // loop writing bytes if we have any
-                        await WriteAsync(WriteCancellationTokenSource.Token);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                if (ex.GetType().Name == "TaskCanceledException")
-                {
-                    tbStatus.Text = "writing task was cancelled, closing device and cleaning up";
-                    closeDevice();
-                }
-                else
-                {
-                    tbStatus.Text = ex.Message;
-                }
-            }
-            finally
-            {
-                // Cleanup once complete
-                if (dataWriteObject != null)
-                {
-                    dataWriteObject.DetachStream();
-                    dataWriteObject = null;
-                }
-            }
-        }
-       
-        private async void Listen()
-        {
-            try
-            {
-                if (serialPort != null)
-                {
-                    Variables.voice.say("Motor Control System Activate");
-                    dataReaderObject = new DataReader(serialPort.InputStream);
-
-                    // keep reading the serial input and writing
-                    while (true)
-                    {
-                        await ReadAsync(ReadCancellationTokenSource.Token);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                if (ex.GetType().Name == "TaskCanceledException")
-                {
-                   tbStatus.Text = "Reading task was cancelled, closing device and cleaning up";
-                   closeDevice();
-                }
-                else
-                {
-                    tbStatus.Text = ex.Message;
-                }
-            }
-            finally
-            {
-                // Cleanup once complete
-                if (dataReaderObject != null)
-                {
-                    dataReaderObject.DetachStream();
-                    dataReaderObject = null;
-                }
-            }
-        }
-
-        private void closeComPort()
-        {
-            if (serialPort != null)
-            {
-                serialPort.Dispose();
-            }
-            serialPort = null;
-
-            //btnConnect.IsEnabled = true;
-            controlState(false);
-            listOfDevices.Clear();
-            //cleanup();
-        }
-
         private void closeDevice()
         {
-            if (serialPort != null)
-            {
-                serialPort.Dispose();
-            }
-            serialPort = null;
+            Variables.maestro.closeActivePort();
 
             //btnConnect.IsEnabled = true;
             controlState(false);
-            listOfDevices.Clear();
+            //listOfDevices.Clear();
+            //Variables.maestroPorts.Clear();
             cleanup();
+            Variables.maestro.cleanup();
         }
 
 
-        private async Task ReadAsync(CancellationToken cancellationToken)
-        {
-            Task<UInt32> loadAsyncTask;
-
-            uint ReadBufferLength = 1024;
-
-            // If task cancellation was requested, comply
-            cancellationToken.ThrowIfCancellationRequested();
-
-            // Set InputStreamOptions to complete the asynchronous read operation when one or more bytes is available
-            dataReaderObject.InputStreamOptions = InputStreamOptions.Partial;
-
-            // Create a task object to wait for data on the serialPort.InputStream
-            loadAsyncTask = dataReaderObject.LoadAsync(ReadBufferLength).AsTask(cancellationToken);
-
-            // Launch the task and wait
-            bytesRead = await loadAsyncTask;
-            if (bytesRead > 0)
-            {
-                inBuffer = dataReaderObject.ReadBuffer((uint)inBuffer.Count()).ToArray();
-                tbStatus.Text = "bytes read successfully!";
-            }
-        }
-
-        private async Task WriteAsync(CancellationToken cancellationToken)
-        {
-            Task<UInt32> writeAsyncTask;
-
-            uint bytesWritten;
-
-            // If task cancellation was requested, comply
-            cancellationToken.ThrowIfCancellationRequested();
-
-            // Set InputStreamOptions to complete the asynchronous read operation when one or more bytes is available
-            // dataWriteObject.add
-            //dataWriteObject.OutputStreamOptions = InputStreamOptions.Partial;
-            
-            writeAsyncTask = dataWriteObject.StoreAsync().AsTask(cancellationToken);
-            // Create a task object to wait for data on the serialPort.InputStream
-            //loadAsyncTask = datawriteObject.LoadAsync(ReadBufferLength).AsTask(cancellationToken);
-
-            // Launch the task and wait
-            bytesWritten = await writeAsyncTask;
-            if (bytesWritten > 0)
-            {
-                //  rcvdText.Text = dataReaderObject.ReadString(bytesRead);
-               // tbStatus.Text = "bytes read successfully!";
-            }
-        }
-
-        private void cancelReadTask()
-        {
-            if (ReadCancellationTokenSource != null)
-            {
-                if (!ReadCancellationTokenSource.IsCancellationRequested)
-                {
-                    ReadCancellationTokenSource.Cancel();
-                }
-            }
-        }
-
-        private void cancelWriteTask()
-        {
-            if (WriteCancellationTokenSource != null)
-            {
-                if (!WriteCancellationTokenSource.IsCancellationRequested)
-                {
-                    WriteCancellationTokenSource.Cancel();
-                }
-            }
-        }
-
-
-
-        private async void btnMaestro_Toggled(object sender, RoutedEventArgs e)
+     
+        private void btnMaestro_Toggled(object sender, RoutedEventArgs e)
         {
            // var selection = servoController.SelectedItem;
             if (btnMaestro.IsOn == false)
@@ -451,11 +236,21 @@ namespace UWPBiped
                 try
                 {
                     tbStatus.Text = "";
-                    cancelReadTask();
-                    cancelWriteTask();
-                    closeComPort();
-                    ListAvailablePorts();
-                    
+                    Variables.maestro.cancelReadTask();
+                    Variables.maestro.cancelWriteTask();
+                    Variables.maestro.closeActivePort();
+                    //closeComPort();
+                    if (Variables.maestroPorts.Count <= 0)
+                    {
+                        listMaestroPorts();
+                    }
+                    else
+                    {
+                        ComportListSource.Source = Variables.maestroPorts;
+                    }
+
+
+
                 }
                 catch (Exception ex)
                 {
@@ -466,18 +261,22 @@ namespace UWPBiped
 
             controlState(true);
 
-            if (servoController.SelectedIndex < 0)
+            if (Comports.SelectedIndex < 0)
             {
                 tbStatus.Text = "Select a device and connect";
                 return;
             }
 
-            DeviceInformation entry = (DeviceInformation)servoController.SelectedItem;
-
+           // DeviceInformation entry = (DeviceInformation)servoController.SelectedItem;
+            PololuMaestroPort maestroPort = (PololuMaestroPort)Comports.SelectedItem;
+            Variables.maestro.connect(maestroPort.portName);
+            
+/*
             try
             {
-                serialPort = await SerialDevice.FromIdAsync(entry.Id);
-
+                serialPort = maestroPort.getComport();
+                Debug.WriteLine(serialPort.PortName);
+                
                 // Disable the 'Connect' button 
                 //btnConnect.IsEnabled = false;
                 controlState(true);
@@ -517,10 +316,10 @@ namespace UWPBiped
                 tbStatus.Text = ex.Message;
                 //comPortInput.IsEnabled = true;
                 //sendTextButton.IsEnabled = false;
-            }
+            }*/
         }
 
-        public bool setTarget(byte channelNumber, UInt16 target)
+       /* public bool setTarget(byte channelNumber, UInt16 target)
         {
             byte[] command = new byte[6];
             target *= 4;
@@ -662,17 +461,17 @@ namespace UWPBiped
                 tbStatus.Text = "Error State: " + dataReaderObject.ToString();
             }
 
-        }
+        }*/
 
         private void btnGetChannel_Click(object sender, RoutedEventArgs e)
         {
             Variables.voice.say("Nukes activated");
-            goHome();
+            Variables.maestro.goHome();
         }
 
         private void servoLeftHip_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setTarget(0, (UInt16)servoLeftHip.Value);
+            Variables.maestro.setTarget(0, (UInt16)servoLeftHip.Value);
             if (calibrating)
             {
                 Variables.config.servocal.lefthip.target = (UInt16)servoLeftHip.Value;
@@ -681,7 +480,7 @@ namespace UWPBiped
 
         private void accelerationLeftLeg_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setAcceleration(1, (UInt16)accelerationLeftLeg.Value);
+            Variables.maestro.setAcceleration(1, (UInt16)accelerationLeftLeg.Value);
             if (calibrating)
             {
                 Variables.config.servocal.leftleg.acceleration = (UInt16)accelerationLeftLeg.Value;
@@ -690,7 +489,7 @@ namespace UWPBiped
 
         private void speedLeftHip_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setSpeed(0, (UInt16)speedLeftHip.Value);
+            Variables.maestro.setSpeed(0, (UInt16)speedLeftHip.Value);
             if (calibrating)
             {
                 Variables.config.servocal.lefthip.speed = (UInt16)speedLeftHip.Value;
@@ -700,7 +499,7 @@ namespace UWPBiped
 
         private void servoLeftLeg_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setTarget(1, (UInt16)servoLeftLeg.Value);
+            Variables.maestro.setTarget(1, (UInt16)servoLeftLeg.Value);
             if (calibrating)
             {
                 Variables.config.servocal.leftleg.target = (UInt16)servoLeftLeg.Value;
@@ -709,7 +508,7 @@ namespace UWPBiped
 
         private void speedLeftLeg_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setSpeed(1, (UInt16)speedLeftLeg.Value);
+            Variables.maestro.setSpeed(1, (UInt16)speedLeftLeg.Value);
             if (calibrating)
             {
                 Variables.config.servocal.leftleg.speed = (UInt16)speedLeftLeg.Value;
@@ -718,7 +517,7 @@ namespace UWPBiped
 
         private void accelerationLeftHip_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setAcceleration(0, (UInt16)accelerationLeftHip.Value);
+            Variables.maestro.setAcceleration(0, (UInt16)accelerationLeftHip.Value);
             if (calibrating)
             {
                 Variables.config.servocal.lefthip.acceleration = (UInt16)accelerationLeftHip.Value;
@@ -727,7 +526,7 @@ namespace UWPBiped
 
         private void speedLeftAnkle_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setSpeed(2, (UInt16)speedLeftAnkle.Value);
+            Variables.maestro.setSpeed(2, (UInt16)speedLeftAnkle.Value);
             if (calibrating)
             {
                 Variables.config.servocal.leftankle.speed = (UInt16)speedLeftAnkle.Value;
@@ -736,7 +535,7 @@ namespace UWPBiped
 
         private void accelerationLeftAnkle_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setAcceleration(2, (UInt16)accelerationLeftAnkle.Value);
+            Variables.maestro.setAcceleration(2, (UInt16)accelerationLeftAnkle.Value);
             if (calibrating)
             {
                 Variables.config.servocal.leftankle.acceleration = (UInt16)accelerationLeftAnkle.Value;
@@ -745,7 +544,7 @@ namespace UWPBiped
 
         private void servoLeftAnkle_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setTarget(2, (UInt16)servoLeftAnkle.Value);
+            Variables.maestro.setTarget(2, (UInt16)servoLeftAnkle.Value);
             if (calibrating)
             {
                 Variables.config.servocal.leftankle.target = (UInt16)servoLeftAnkle.Value;
@@ -754,7 +553,7 @@ namespace UWPBiped
 
         private void speedRightHip_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setSpeed(3, (UInt16)speedRightHip.Value);
+            Variables.maestro.setSpeed(3, (UInt16)speedRightHip.Value);
             if (calibrating)
             {
                 Variables.config.servocal.rightleg.speed = (UInt16)speedRightLeg.Value;
@@ -763,7 +562,7 @@ namespace UWPBiped
 
         private void accelerationRightHip_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setAcceleration(3, (UInt16)accelerationRightHip.Value);
+            Variables.maestro.setAcceleration(3, (UInt16)accelerationRightHip.Value);
             if (calibrating)
             {
                 Variables.config.servocal.rightleg.acceleration = (UInt16)accelerationRightLeg.Value;
@@ -772,7 +571,7 @@ namespace UWPBiped
 
         private void servoRightHip_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setTarget(3, (UInt16)servoRightHip.Value);
+            Variables.maestro.setTarget(3, (UInt16)servoRightHip.Value);
             if (calibrating)
             {
                 Variables.config.servocal.righthip.target = (UInt16)servoRightHip.Value;
@@ -781,7 +580,7 @@ namespace UWPBiped
 
         private void speedRightLeg_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setSpeed(4, (UInt16)speedRightLeg.Value);
+            Variables.maestro.setSpeed(4, (UInt16)speedRightLeg.Value);
             if (calibrating)
             {
                 Variables.config.servocal.rightleg.speed = (UInt16)speedRightLeg.Value;
@@ -790,7 +589,7 @@ namespace UWPBiped
 
         private void accelerationRightLeg_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setAcceleration(4, (UInt16)accelerationRightLeg.Value);
+            Variables.maestro.setAcceleration(4, (UInt16)accelerationRightLeg.Value);
             if (calibrating)
             {
                 Variables.config.servocal.rightleg.acceleration = (UInt16)accelerationRightLeg.Value;
@@ -799,7 +598,7 @@ namespace UWPBiped
 
         private void servoRightLeg_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setTarget(4, (UInt16)servoRightLeg.Value);
+            Variables.maestro.setTarget(4, (UInt16)servoRightLeg.Value);
             if (calibrating)
             {
                 Variables.config.servocal.rightleg.target = (UInt16)servoRightLeg.Value;
@@ -808,7 +607,7 @@ namespace UWPBiped
 
         private void speedRightAnkle_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setSpeed(5, (UInt16)speedRightAnkle.Value);
+            Variables.maestro.setSpeed(5, (UInt16)speedRightAnkle.Value);
             if (calibrating)
             {
                 Variables.config.servocal.rightankle.speed = (UInt16)speedRightAnkle.Value;
@@ -817,7 +616,7 @@ namespace UWPBiped
 
         private void accelerationRightAnkle_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setAcceleration(5, (UInt16)accelerationRightAnkle.Value);
+            Variables.maestro.setAcceleration(5, (UInt16)accelerationRightAnkle.Value);
             if (calibrating)
             {
                 Variables.config.servocal.rightankle.acceleration = (UInt16)accelerationRightAnkle.Value;
@@ -826,7 +625,7 @@ namespace UWPBiped
 
         private void servoRightAnkle_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            setTarget(5, (UInt16)servoRightAnkle.Value);
+            Variables.maestro.setTarget(5, (UInt16)servoRightAnkle.Value);
             if (calibrating)
             {
                 Variables.config.servocal.rightankle.target = (UInt16)servoRightAnkle.Value;

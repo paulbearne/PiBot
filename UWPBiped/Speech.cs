@@ -31,7 +31,7 @@ namespace UWPBiped
 
         
 
-        private void Media_MediaEnded(object sender, RoutedEventArgs e)
+        private  void Media_MediaEnded(object sender, RoutedEventArgs e)
         {
             if (OnComplete != null)
             {
@@ -43,7 +43,7 @@ namespace UWPBiped
         {
             speak(text);
         }
-        private async void speak(string textToSynthesize)
+        private  async void speak(string textToSynthesize)
         {
             // If the media is playing, the user has pressed the button to stop the playback.
             if (media.CurrentState.Equals(Windows.UI.Xaml.Media.MediaElementState.Playing))

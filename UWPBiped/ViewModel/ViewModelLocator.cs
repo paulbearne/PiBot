@@ -20,7 +20,7 @@ namespace UWPBiped.ViewModel
             SimpleIoc.Default.Register<INavigationService2>(() =>
             {
                 var nav = new UWPBiped.Service.NavigationService();
-                nav.Configure("Manual", typeof(ManualControl));
+                nav.Configure("Manual", typeof(ConfigurationPage));
                 nav.Configure("Audio", typeof(SynthesizeTextPage));
                 nav.Configure("Camera", typeof(CameraPage));
                 nav.Configure("Settings", typeof(SettingsPage));

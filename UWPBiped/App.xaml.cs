@@ -22,6 +22,7 @@ using GalaSoft.MvvmLight.Ioc;
 
 using UWPBiped.Model;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace UWPBiped
 {
@@ -79,8 +80,11 @@ namespace UWPBiped
             Frame rootFrame = Window.Current.Content as Frame;
             Variables.config = new ConfigData();
             bool result = await Variables.config.configExists();
+            Variables.maestroPorts = new ObservableCollection<PololuMaestroPort>();
+            Variables.maestro = new PololuMaestro();
+            Variables.maestroPorts = await Variables.maestro.locateDevices();
             // load our config data
-            if (result)
+            if (result) 
             {
               // no need to do anything as will already have been loaded
 
@@ -120,12 +124,6 @@ namespace UWPBiped
             }
             // Ensure the current window is active
             Window.Current.Activate();
-
-            // TODO - refator this 
-            //var nav = SimpleIoc.Default.GetInstance<INavigationService>() as UWPBiped.Service.NavigationService;
-            //var mainPage = rootFrame.Content as MainPage;
-            //nav.Root = mainPage.NavigationRoot;
-
         }
 
         /// <summary>

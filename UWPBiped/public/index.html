@@ -90,22 +90,7 @@
     
     <xml id="toolbox" style="display: none">
       <category name="Basic" colour="190">
-        <block type="device_show_number">
-          <value name="NUMBER">
-            <shadow type="math_number">
-              <field name="NUM">2</field>
-            </shadow>
-          </value>
-        </block>
-        <block type="device_print_message">
-          <value name="MESSAGE">
-            <shadow type="text">
-              <field name="TEXT">Hello!</field>
-            </shadow>
-          </value>
-        </block>
-        <block type="device_clear_display"></block>
-        <block type="device_clear_display_no_update"></block>
+           
         <block type="device_forever"></block>
         <block type="device_pause">
           <value name="PAUSE">
@@ -121,6 +106,8 @@
         <block type="logic_operation"></block>
         <block type="logic_negate"></block>
         <block type="logic_boolean"></block>
+        <block type="logic_null"></block>
+        <block type="logic_ternary"></block>
       </category>
       <category name="Loops" colour="120">
         <block type="controls_repeat_ext">
@@ -134,15 +121,97 @@
       </category>
       <category name="Math" colour="230">
         <block type="math_number"></block>
-        <block type="math_arithmetic"></block>
-        <block type="device_random">
-          <value name="LIMIT">
-            <shadow type="math_number">
-              <field name="NUM">4</field>
-            </shadow>
-          </value>
-        </block>
-        <block type="math_single"></block>
+      <block type="math_arithmetic">
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_single">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">9</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_trig">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">45</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_constant"></block>
+      <block type="math_number_property">
+        <value name="NUMBER_TO_CHECK">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_change">
+        <value name="DELTA">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_round">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">3.1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_on_list"></block>
+      <block type="math_modulo">
+        <value name="DIVIDEND">
+          <shadow type="math_number">
+            <field name="NUM">64</field>
+          </shadow>
+        </value>
+        <value name="DIVISOR">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_constrain">
+        <value name="VALUE">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="LOW">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="HIGH">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_int">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_float"></block>
       </category>
       <category name="Input" colour="3">
         <block type="device_get_acceleration"></block>
@@ -172,6 +241,15 @@
           <block type="variables_set"></block>
           <block type="variables_get"></block>
       </category>
+	  <category name="Speech" colour="165">
+	      <block type="device_say_message">
+			<value name="TEXTTOSAY">
+            <shadow type="text">
+              <field name="TEXT">Hello</field>
+            </shadow>
+          </value>
+		  </block>
+	  </category>
     </xml>
 
 <!-- INCLUDE xml for last-script -->
@@ -182,10 +260,10 @@
         var blocklyDiv = document.getElementById('blocklyDiv');
         var generatedCodeArea = document.getElementById('generatedCodeArea');
         var codePrefix = 
-          'var basic = new IoTBlocklyHelper.Basic();\n' +
-          'var gpio = new IoTBlocklyHelper.Gpio();\n' +
-          'var senseHat = new IoTBlocklyHelper.SenseHat();\n' +
-          'var adc = new IoTBlocklyHelper.Adc();\n' +
+          'var basic = new UWPBiped.Basic();\n' +
+          'var gpio = new UWPBiped.Gpio();\n' +
+          'var adc = new UWPBiped.Adc();\n' +
+		  'var talk = new UWPBiped.Talk();\n' +
           'var eventsQueue = [];\n\n' +
           'function pauseHelper(ms) {\n' +
           '  if (eventsQueue.length == 0) {\n' +
